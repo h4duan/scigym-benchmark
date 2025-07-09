@@ -3,24 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+        content="Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab">
+  <meta name="keywords" content="SCIGYM, Systems Biology, Language Models, Scientific Discovery">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SciGym: Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+  <title>SCIGYM - Measuring Scientific Capabilities of Language Models</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
@@ -32,7 +18,7 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/favicon.ico">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -42,29 +28,52 @@
 </head>
 <body>
 
-
-
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">SciGym: Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab</h1>
+          <h1 class="title is-2 publication-title"><strong>SCIGYM:</strong> Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://keunhong.com">Haonan Duan</a><sup>1</sup>,</span>
+              <a href="#">Haonan Duan*</a><sup>1,5</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Stephen Zhewen Lu*</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Caitlin F. Harrigan</a><sup>1,5</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Nishkrit Desai</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Jiarui Lu</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Michał Koziarski</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Leonardo Cotta</a><sup>5</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Chris J. Maddison</a><sup>1,5</sup>
+            </span>
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Washington,</span>
-            <span class="author-block"><sup>2</sup>Google Research</span>
+            <span class="author-block"><sup>1</sup>University of Toronto</span>,
+            <span class="author-block"><sup>2</sup>SickKids</span>,
+            <span class="author-block"><sup>3</sup>Axiom</span>,
+            <span class="author-block"><sup>4</sup>Mila</span>,
+            <span class="author-block"><sup>5</sup>Vector Institute</span>
           </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <!-- PDF Link. -->
+              <!-- PDF Link -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2507.02083"
+                <a href="https://arxiv.org/abs/2507.02083"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -72,16 +81,7 @@
                   <span>Paper</span>
                 </a>
               </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2507.02083"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
+              <!-- Code Link -->
               <span class="link-block">
                 <a href="https://github.com/h4duan/SciGym"
                    class="external-link button is-normal is-rounded is-dark">
@@ -91,7 +91,7 @@
                   <span>Code</span>
                   </a>
               </span>
-              <!-- Dataset Link. -->
+              <!-- Data Link -->
               <span class="link-block">
                 <a href="https://huggingface.co/datasets/h4duan/scigym-sbml"
                    class="external-link button is-normal is-rounded is-dark">
@@ -99,95 +99,20 @@
                       <i class="far fa-images"></i>
                   </span>
                   <span>Data</span>
-                  </a>
-            </div>
-
-            <span class="link-block">
-              <a href="https://huggingface.co/datasets/h4duan/scigym-eval"
-                 class="external-link button is-normal is-rounded is-dark">
-                <span class="icon">
-                    <i class="far fa-images"></i>
-                </span>
-                <span>Data</span>
                 </a>
+              </span>
+              <!-- Eval Link -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/h4duan/scigym-eval"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-chart-bar"></i>
+                  </span>
+                  <span>Evaluation</span>
+                </a>
+              </span>
+            </div>
           </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
       </div>
     </div>
   </div>
@@ -196,97 +121,236 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- Abstract. -->
+    <!-- Abstract -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
+        <h3 class="title is-4">Abstract</h3>
         <div class="content has-text-justified">
           <p>
-            Designing experiments and result interpretations are core scientific competencies, particularly in biology, where researchers perturb complex systems to uncover the underlying systems. Recent efforts to evaluate the scientific capabilities of large language models (LLMs) fail to test these competencies because wet-lab experimentation is prohibitively expensive: in expertise, time and equipment. We introduce \ourbench, a first-in-class benchmark that assesses LLMs' iterative experiment design and analysis abilities in open-ended scientific discovery tasks. \ourbench overcomes the challenge of wet-lab costs by running a dry lab of biological systems. These models, encoded in Systems Biology Markup Language, are efficient for generating simulated data, making them ideal testbeds for experimentation on realistically complex systems. We evaluated six frontier LLMs on $137$ small systems, and released a total of $350$ systems. Our evaluation shows that while more capable models demonstrated superior performance, all models' performance declined significantly as system complexity increased, suggesting substantial room for improvement in the scientific capabilities of LLM agents.
+            Designing experiments and result interpretations are core scientific competencies, particularly in biology, where researchers perturb complex systems to uncover the underlying systems. Recent efforts to evaluate the scientific capabilities of large language models (LLMs) fail to test these competencies because wet-lab experimentation is prohibitively expensive: in expertise, time and equipment. We introduce <strong>SCIGYM</strong>, a first-in-class benchmark that assesses LLMs' iterative experiment design and analysis abilities in open-ended scientific discovery tasks.
+          </p>
+          <p>
+            SCIGYM overcomes the challenge of wet-lab costs by running a dry lab of biological systems. These models, encoded in Systems Biology Markup Language, are efficient for generating simulated data, making them ideal testbeds for experimentation on realistically complex systems. We evaluated six frontier LLMs on 137 small systems, and released a total of 350 systems. Our evaluation shows that while more capable models demonstrated superior performance, all models' performance declined significantly as system complexity increased, suggesting substantial room for improvement in the scientific capabilities of LLM agents.
           </p>
         </div>
       </div>
     </div>
     <!--/ Abstract. -->
 
-</section>
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="content has-text-justified">
+
+            <h3 class="title is-4">What is Systems Biology Markup Language (SBML)?</h3>
+            <p>
+            SBML is a standard machine-readable format for formal specifications of biochemical dynamic networks in systems biology. These models provide mathematical descriptions of species concentrations, reaction kinetics, and system dynamics as ordinary differential equation (ODE) systems. SBML describes biochemical reaction networks using species (molecules, proteins), reactions (processes that change quantities), and kinetic laws (reaction speeds). Numerous simulation software packages have been developed to efficiently generate time-series data from SBML models, with the most popular ones being libRoadRunner and COPASI.
+            </p>
+
+            <h3 class="title is-4">Benchmark Design and Data Curation</h3>
+            <p>
+            SCIGYM contains <strong>350 curated SBML models</strong> from <a href="https://www.ebi.ac.uk/biomodels/">BioModels</a>, a public repository of manually-curated models from published literature. The models span diverse areas of biology including metabolic pathways, gene regulatory networks, cell signaling, and epidemiological models. Each model provides a realistic biological system for agents to discover through systematic experimentation. To prevent memorization, we preprocessed models by anonymizing identifiers and shuffling components while preserving the underlying biological structure.
+            </p>
+
+            <h3 class="title is-4">End-to-end Scientific Discovery Framework</h3>
+            <center>
+              <img src="./static/images/framework.png" display="block" style="max-width: 100%; align-items: center; margin: auto;">
+            </center>
+            <p>
+            <strong>SCIGYM simulates all key facets of end-to-end scientific discovery:</strong> forming hypotheses, planning and executing experiments, analyzing results, and drawing conclusions. Starting with a partial SBML model where reactions have been removed, agents must design perturbation experiments, analyze time-series data, and propose mechanistic models that explain the observed biological system behavior.
+            </p>
+
+            <center>
+              <img src="./static/images/experiment.png" style="display: block; max-width: 70%; margin: 2rem auto;">            
+            </center>
+            <p>
+              <strong>SBML models serve as data simulators for experimental perturbations.</strong> When agents propose perturbations (such as changing initial concentrations), our environment applies the perturbation to the reference SBML model, simulates the modified system, and returns time-series data. This creates a realistic "dry lab" where agents can iteratively test hypotheses without expensive wet-lab experimentation.
+            </p>
+
+            <h3 class="title is-4">Agent Framework and Action Space</h3>
+            <p>
+            We implemented a ReAct-style agent using a Thoughts-Actions-Observations framework. In each iteration, agents can choose from three actions:
+            </p>
+            <ul>
+              <li><strong>Writing code:</strong> Analyze experimental results using Python with access to libraries like pandas, numpy, and custom SBML simulation tools</li>
+              <li><strong>Conducting experiments:</strong> Request perturbations such as changing initial species concentrations</li>
+              <li><strong>Submitting models:</strong> Provide final SBML model with discovered reactions</li>
+            </ul>
+
+            <h3 class="title is-4">Evaluation Metrics</h3>
+            <p>
+            Measuring progress on scientific discovery is challenging. SCIGYM evaluates complementary aspects of discovery performance:
+            </p>
+            <div class="columns">
+              <div class="column">
+                <div class="box">
+                  <h4 class="title is-6"><strong>Reaction Matching Score (RMS)</strong></h4>
+                  <p>Evaluates recovery of ground truth reaction structures by matching identical sets of reactants, products, and modifiers.</p>
+                </div>
+              </div>
+              <div class="column">
+                <div class="box">
+                  <h4 class="title is-6"><strong>Simulation Trajectory Error (STE)</strong></h4>
+                  <p>Compares dynamic behavior through time-series trajectories using Symmetric Mean Absolute Percentage Error (SMAPE).</p>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="title is-4">Experimental Results</h3>
+            <p>
+            <strong>We evaluated six frontier LLMs from three model families</strong> (Gemini, Claude, GPT-4) on SCIGYM-small, comparing both professional and mini variants. The results reveal several important findings about current models' scientific capabilities.
+            </p>
+
+            <!-- Performance Table -->
+            <div class="table-container" style="margin: 2rem 0;">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th rowspan="2">Model</th>
+                    <th rowspan="2">STE ↓</th>
+                    <th colspan="3" class="has-text-centered">RMS With Modifiers</th>
+                    <th colspan="3" class="has-text-centered">RMS Without Modifiers</th>
+                  </tr>
+                  <tr>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Gemini-2.5-Flash</td>
+                    <td>0.4181</td>
+                    <td>0.1527</td>
+                    <td>0.1071</td>
+                    <td>0.1217</td>
+                    <td>0.2399</td>
+                    <td>0.1839</td>
+                    <td>0.2005</td>
+                  </tr>
+                  <tr>
+                    <td>GPT-4.1-mini</td>
+                    <td>0.6007</td>
+                    <td>0.1516</td>
+                    <td>0.1253</td>
+                    <td>0.1320</td>
+                    <td>0.2530</td>
+                    <td>0.2313</td>
+                    <td>0.2322</td>
+                  </tr>
+                  <tr>
+                    <td>Claude-3.5-Haiku</td>
+                    <td>0.6281</td>
+                    <td>0.0858</td>
+                    <td>0.0421</td>
+                    <td>0.0530</td>
+                    <td>0.1454</td>
+                    <td>0.0805</td>
+                    <td>0.0987</td>
+                  </tr>
+                  <tr class="has-background-success-light">
+                    <td><strong>Gemini-2.5-Pro</strong></td>
+                    <td><strong>0.3212</strong></td>
+                    <td><strong>0.2138</strong></td>
+                    <td><strong>0.1664</strong></td>
+                    <td><strong>0.1817</strong></td>
+                    <td><strong>0.3781</strong></td>
+                    <td><strong>0.3219</strong></td>
+                    <td><strong>0.3383</strong></td>
+                  </tr>
+                  <tr>
+                    <td>GPT-4.1</td>
+                    <td>0.4611</td>
+                    <td>0.2067</td>
+                    <td>0.1597</td>
+                    <td>0.1740</td>
+                    <td>0.3517</td>
+                    <td>0.2888</td>
+                    <td>0.3038</td>
+                  </tr>
+                  <tr>
+                    <td>Claude-3.7-Sonnet</td>
+                    <td>0.3615</td>
+                    <td>0.1780</td>
+                    <td>0.1698</td>
+                    <td>0.1688</td>
+                    <td>0.3160</td>
+                    <td>0.3170</td>
+                    <td>0.3047</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="is-size-7 has-text-grey">
+                <strong>Table 1:</strong> Pro models outperform their mini counterparts in SCIGYM, with Gemini-2.5-Pro achieving the best overall performance. Bold values indicate best performance in each metric.
+              </p>
+            </div>
+
+            <h3 class="title is-4">Key Findings</h3>
+            <p>
+            Our evaluation revealed several important insights about current LLMs' scientific capabilities:
+            </p>
+            
+            <div class="notification is-info is-light">
+              <h4 class="title is-6">🏆 Pro Models Consistently Outperform Mini Variants</h4>
+              <p>Across all model families, professional variants achieved both lower simulation trajectory errors and higher reaction matching scores, suggesting that enhanced model capabilities benefit scientific discovery tasks.</p>
+            </div>
+
+            <div class="notification is-warning is-light">
+              <h4 class="title is-6">📈 Performance Degrades with System Complexity</h4>
+              <p>All models showed significant performance decline as the number of reactions increased from 2 to 10, with simulation errors increasing from ~0.1 to 0.55 for top-performing models.</p>
+            </div>
+
+            <div class="notification is-danger is-light">
+              <h4 class="title is-6">🔬 Modifier Relationships Pose Major Challenge</h4>
+              <p>Models performed substantially better at discovering reactant-product relationships compared to modifier relationships. Even the best model achieved F1 scores 5× higher for reactant-product vs. modifier connections.</p>
+            </div>
+
+            <div class="notification is-primary is-light">
+              <h4 class="title is-6">⚠️ Overfitting to Experimental Data</h4>
+              <p>Proposed mechanisms often failed to generalize to different initial conditions, indicating that agents overfit to specific experimental data rather than capturing fundamental biological properties.</p>
+            </div>
 
 
-<section class="section">
-  <div class="container is-max-desktop">
 
-
-        
-
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
-
-        <div class="content has-text-justified">
-          <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
-          </p>
-          <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
-          </p>
+            <h3 class="title is-4">Impact and Future Directions</h3>
+            <p>
+            This work has immediate relevance for LLM-based autonomous experiment planning in self-driving labs, where selecting appropriate AI systems can enhance search efficiency and accelerate scientific discovery. we believe that SCIGYM realizes an interesting new direction for AI scientist benchmarks. To our knowledge, SCIGYM is the first benchmark to evaluate LLMs on the full cycle of scientific experimentation, and makes possible the study of agentic scientific decision-making.  
+            SCIGYM is also a framework which can improve over time. As systems biologists continue to make discoveries in their domain and add to the BioModels database, SCIGYM will also become more robust and potentially expand to cover more, different, experimental modalities. For experimental protocols that can be precisely specified and simulated, SCIGYM can easily be extended.
+            
+            <p>
+              We hope that our work introduces a valuable testbed that can continue to evolve to better capture the complexities of real scientific discovery. 
+            </p>
+            
+          </div>
         </div>
       </div>
     </div>
-    <!--/ Concurrent Work. -->
-
   </div>
 </section>
-
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{duan2025measuring,
-      title={Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab},
-      author={Duan, Haonan and Lu, Stephen Zhewen and Harrigan, Caitlin Fiona and Desai, Nishkrit and Lu, Jiarui and Koziarski, Micha{\l} and Cotta, Leonardo and Maddison, Chris J},
-      journal={arXiv preprint arXiv:2507.02083},
-      year={2025}
-    }</code></pre>
+    <pre><code>@article{duan2024scigym,
+    title={Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab},
+    author={Haonan Duan and Stephen Zhewen Lu and Caitlin F. Harrigan and Nishkrit Desai and Jiarui Lu and Michał Koziarski and Leonardo Cotta and Chris J. Maddison},
+    journal={Preprint},
+    year={2024},
+    url={https://arxiv.org/abs/2507.04100}
+}</code></pre>
   </div>
 </section>
 
-
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
     <div class="columns is-centered">
       <div class="column is-8">
-        <div class="content">
+        <div class="content has-text-centered">
           <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
+            Website template borrowed from <a href="https://nerfies.github.io/">Nerfies</a>.
           </p>
         </div>
       </div>
