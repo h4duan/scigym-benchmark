@@ -78,6 +78,7 @@ class ChatboxParser {
         let inXMLBlock = false;
         let xmlBlock = [];
         let hasStarted = false;
+        let currentSubSection = null; // Track subsections like ### Experiment, ### Code
         
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
@@ -94,9 +95,9 @@ class ChatboxParser {
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
-                // Don't create a new message here, let the content sections handle it
                 currentMessage = null;
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
@@ -107,6 +108,7 @@ class ChatboxParser {
                 }
                 currentMessage = { type: 'agent', section: 'thoughts' };
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
@@ -116,6 +118,7 @@ class ChatboxParser {
                 }
                 currentMessage = { type: 'agent', section: 'action' };
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
@@ -126,61 +129,71 @@ class ChatboxParser {
                 }
                 currentMessage = { type: 'environment', section: 'observation' };
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
-            // Check for experiment results (separate message type)
-            if (line.match(/^## Experiment Result/)) {
-                if (currentMessage) {
-                    this.addMessage(currentMessage, currentContent);
+            // Parse subsections for agent actions
+            if (currentMessage && currentMessage.type === 'agent' && currentMessage.section === 'action') {
+                if (line.match(/^### Experiment/)) {
+                    currentSubSection = 'experiment';
+                    continue;
                 }
-                currentMessage = { type: 'environment', section: 'experiment_result' };
-                currentContent = [];
-                continue;
-            }
-            
-            // Check for code execution errors
-            if (line.match(/^## Code Stderror/)) {
-                if (currentMessage) {
-                    this.addMessage(currentMessage, currentContent);
+                if (line.match(/^### Code/)) {
+                    currentSubSection = 'code';
+                    continue;
                 }
-                currentMessage = { type: 'environment', section: 'code_error' };
-                currentContent = [];
-                continue;
             }
             
-            // Check for task info sections  
+            // Parse subsections for environment responses
+            if (currentMessage && currentMessage.type === 'environment') {
+                if (line.match(/^## Code Stderror/)) {
+                    currentSubSection = 'code_error';
+                    continue;
+                }
+                if (line.match(/^## Code Stdout/)) {
+                    currentSubSection = 'code_output';
+                    continue;
+                }
+                if (line.match(/^## Experiment Result/)) {
+                    currentSubSection = 'experiment_result';
+                    continue;
+                }
+            }
+            
+            // Check for other environment sections
             if (line.match(/^## Task Info/)) {
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
                 currentMessage = { type: 'environment', section: 'task_info' };
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
-            // Check for SBML model sections
             if (line.match(/^## Incomplete SBML Model/)) {
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
                 currentMessage = { type: 'environment', section: 'sbml_model' };
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
-            // Check for max iterations and other setup info
             if (line.match(/^## Max iterations/)) {
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
                 currentMessage = { type: 'environment', section: 'iteration_info' };
                 currentContent = [];
+                currentSubSection = null;
                 continue;
             }
             
-            // Skip headers that aren't part of main content
-            if (line.match(/^### Experiment|^### Code|^### Allowed libraries/)) {
+            // Skip other headers
+            if (line.match(/^### Allowed libraries/)) {
                 continue;
             }
             
@@ -194,11 +207,11 @@ class ChatboxParser {
             if (inXMLBlock) {
                 xmlBlock.push(line);
                 if (line.match(/^<\/sbml>/)) {
-                    // End of XML block
                     currentContent.push({
                         type: 'xml',
                         content: xmlBlock.join('\n'),
-                        language: 'xml'
+                        language: 'xml',
+                        subSection: currentSubSection
                     });
                     xmlBlock = [];
                     inXMLBlock = false;
@@ -209,19 +222,18 @@ class ChatboxParser {
             // Handle code blocks
             if (line.match(/^```/)) {
                 if (inCodeBlock) {
-                    // End of code block
                     if (codeBlock.length > 0) {
                         currentContent.push({
                             type: 'code',
                             content: codeBlock.join('\n'),
-                            language: currentCodeLanguage
+                            language: currentCodeLanguage,
+                            subSection: currentSubSection
                         });
                     }
                     codeBlock = [];
                     inCodeBlock = false;
                     currentCodeLanguage = '';
                 } else {
-                    // Start of code block
                     currentCodeLanguage = line.replace(/```/g, '').trim() || 'text';
                     inCodeBlock = true;
                     codeBlock = [];
@@ -232,17 +244,24 @@ class ChatboxParser {
             if (inCodeBlock) {
                 codeBlock.push(line);
             } else if (currentMessage && line.trim()) {
-                // Check if this looks like CSV/experimental data table content
-                if (line.match(/^Time\s+id_/) || line.match(/^\d+/) || line.match(/^\d+\.\d+e[+-]\d+/) || line.match(/^\.\.\./)) {
-                    // This is experimental data content
+                // Handle experimental data or regular text based on subsection
+                if (currentSubSection === 'experiment_result' && (line.match(/^Time\s+id_/) || line.match(/^\d+/) || line.match(/^\d+\.\d+e[+-]\d+/) || line.match(/^\.\.\./))) {
                     if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'experimental_data') {
-                        currentContent.push({ type: 'experimental_data', content: [] });
+                        currentContent.push({ 
+                            type: 'experimental_data', 
+                            content: [],
+                            subSection: currentSubSection 
+                        });
                     }
                     currentContent[currentContent.length - 1].content.push(line);
                 } else {
-                    // Regular text content - only add non-empty lines
-                    if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'text') {
-                        currentContent.push({ type: 'text', content: [] });
+                    // Regular text content
+                    if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'text' || currentContent[currentContent.length - 1].subSection !== currentSubSection) {
+                        currentContent.push({ 
+                            type: 'text', 
+                            content: [],
+                            subSection: currentSubSection 
+                        });
                     }
                     currentContent[currentContent.length - 1].content.push(line);
                 }
@@ -462,13 +481,13 @@ class ChatboxParser {
                 textDiv.innerHTML = item.content.join('<br>');
                 contentDiv.appendChild(textDiv);
             } else if (item.type === 'code') {
-                const codeContainer = this.createCodeBlock(item.content, item.language);
+                const codeContainer = this.createCodeBlock(item.content, item.language, item.subSection);
                 contentDiv.appendChild(codeContainer);
             } else if (item.type === 'xml') {
-                const xmlContainer = this.createCodeBlock(item.content, item.language);
+                const xmlContainer = this.createCodeBlock(item.content, item.language, item.subSection);
                 contentDiv.appendChild(xmlContainer);
             } else if (item.type === 'experimental_data') {
-                const dataContainer = this.createCodeBlock(item.content.join('\n'), 'text');
+                const dataContainer = this.createCodeBlock(item.content.join('\n'), 'text', item.subSection);
                 contentDiv.appendChild(dataContainer);
             }
         });
@@ -499,38 +518,79 @@ class ChatboxParser {
         }, 800);
     }
 
-    createCodeBlock(code, language) {
+    createCodeBlock(code, language, subSection) {
         const container = document.createElement('div');
         container.className = 'expandable-code-container';
         
-        // Determine block characteristics and styling
+        // Determine block characteristics based on subsection
         const lines = code.split('\n');
-        let isLong, previewLines, buttonText, collapseText, blockType;
+        let isLong, previewLines, buttonText, collapseText, blockType, headerIcon, headerText;
         
-        if (language === 'xml') {
-            isLong = lines.length > 8;
-            previewLines = lines.slice(0, 6);
-            buttonText = '🧬 View Full SBML Model';
-            collapseText = '🧬 Collapse SBML';
-            blockType = 'xml-block';
-        } else if (language === 'text' && code.includes('Time')) {
-            isLong = lines.length > 10;
-            previewLines = lines.slice(0, 8);
-            buttonText = '📊 View Full Experiment Data';
-            collapseText = '📊 Collapse Data';
-            blockType = 'data-block';
-        } else if (language === 'python' || language === 'code') {
-            isLong = lines.length > 5;
-            previewLines = lines.slice(0, 4);
-            buttonText = '💻 View Full Code';
-            collapseText = '💻 Collapse Code';
-            blockType = 'code-block';
-        } else {
-            isLong = lines.length > 6;
-            previewLines = lines.slice(0, 5);
-            buttonText = '📄 View Full Content';
-            collapseText = '📄 Collapse Content';
-            blockType = 'text-block';
+        // Map subsections to specific styling
+        switch (subSection) {
+            case 'experiment':
+                isLong = lines.length > 6;
+                previewLines = lines.slice(0, 5);
+                buttonText = '🧪 View Full Experiment';
+                collapseText = '🧪 Collapse Experiment';
+                blockType = 'experiment-block';
+                headerIcon = '🧪';
+                headerText = 'Experiment Design';
+                break;
+            case 'code':
+                isLong = lines.length > 5;
+                previewLines = lines.slice(0, 4);
+                buttonText = '💻 View Full Code';
+                collapseText = '💻 Collapse Code';
+                blockType = 'code-block';
+                headerIcon = '💻';
+                headerText = 'Python Code';
+                break;
+            case 'code_error':
+                isLong = lines.length > 4;
+                previewLines = lines.slice(0, 3);
+                buttonText = '❌ View Full Error';
+                collapseText = '❌ Collapse Error';
+                blockType = 'error-block';
+                headerIcon = '❌';
+                headerText = 'Code Error';
+                break;
+            case 'code_output':
+                isLong = lines.length > 8;
+                previewLines = lines.slice(0, 6);
+                buttonText = '📤 View Full Output';
+                collapseText = '📤 Collapse Output';
+                blockType = 'output-block';
+                headerIcon = '📤';
+                headerText = 'Code Output';
+                break;
+            case 'experiment_result':
+                isLong = lines.length > 10;
+                previewLines = lines.slice(0, 8);
+                buttonText = '📊 View Full Results';
+                collapseText = '📊 Collapse Results';
+                blockType = 'data-block';
+                headerIcon = '📊';
+                headerText = 'Experiment Results';
+                break;
+            default:
+                if (language === 'xml') {
+                    isLong = lines.length > 8;
+                    previewLines = lines.slice(0, 6);
+                    buttonText = '🧬 View Full SBML';
+                    collapseText = '🧬 Collapse SBML';
+                    blockType = 'xml-block';
+                    headerIcon = '🧬';
+                    headerText = 'SBML Model';
+                } else {
+                    isLong = lines.length > 6;
+                    previewLines = lines.slice(0, 5);
+                    buttonText = '📄 View Full';
+                    collapseText = '📄 Collapse';
+                    blockType = 'text-block';
+                    headerIcon = '📄';
+                    headerText = 'Details';
+                }
         }
         
         // Add block type class for specific styling
@@ -544,26 +604,6 @@ class ChatboxParser {
         // Add block type header
         const blockHeader = document.createElement('div');
         blockHeader.className = 'block-header';
-        let headerIcon, headerText;
-        
-        switch (blockType) {
-            case 'xml-block':
-                headerIcon = '🧬';
-                headerText = 'SBML Model';
-                break;
-            case 'data-block':
-                headerIcon = '📊';
-                headerText = 'Experiment Data';
-                break;
-            case 'code-block':
-                headerIcon = '💻';
-                headerText = 'Python Code';
-                break;
-            default:
-                headerIcon = '📄';
-                headerText = 'Content';
-        }
-        
         blockHeader.innerHTML = `<span class="block-icon">${headerIcon}</span><span class="block-title">${headerText}</span>`;
         previewDiv.appendChild(blockHeader);
         
@@ -588,7 +628,7 @@ class ChatboxParser {
             
             const fullHeader = document.createElement('div');
             fullHeader.className = 'block-header';
-            fullHeader.innerHTML = `<span class="block-icon">${headerIcon}</span><span class="block-title">${headerText} (Full)</span>`;
+            fullHeader.innerHTML = `<span class="block-icon">${headerIcon}</span><span class="block-title">${headerText} (Complete)</span>`;
             fullDiv.appendChild(fullHeader);
             
             const fullCode = document.createElement('pre');

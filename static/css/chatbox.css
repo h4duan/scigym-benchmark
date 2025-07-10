@@ -1,4 +1,385 @@
-/* Chatbox Styles */
+/* Enhanced Chat Interface with Superior Aesthetics */
+.chat-bubble {
+    margin-bottom: 1.5rem;
+    max-width: 85%;
+    position: relative;
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
+}
+
+.chat-bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.agent-bubble {
+    margin-left: auto;
+    margin-right: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 24px 24px 8px 24px;
+    padding: 0;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.environment-bubble {
+    margin-left: 1rem;
+    margin-right: auto;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    color: #2c3e50;
+    border-radius: 24px 24px 24px 8px;
+    padding: 0;
+    box-shadow: 0 4px 20px rgba(252, 182, 159, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem 0.75rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.environment-bubble .message-header {
+    border-bottom: 1px solid rgba(44, 62, 80, 0.1);
+}
+
+.message-avatar {
+    font-size: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.environment-bubble .message-avatar {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.1) 0%, rgba(44, 62, 80, 0.05) 100%);
+}
+
+.message-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    letter-spacing: 0.3px;
+}
+
+.message-content {
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+}
+
+.message-text {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 0.95rem;
+}
+
+.message-text:last-child {
+    margin-bottom: 0;
+}
+
+.code-block {
+    border-left: 4px solid #4ecdc4;
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.08) 0%, rgba(78, 205, 196, 0.03) 100%);
+}
+
+.error-block {
+    border-left: 4px solid #e74c3c;
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%);
+}
+
+.output-block {
+    border-left: 4px solid #2ecc71;
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.03) 100%);
+}
+
+.data-block {
+    border-left: 4px solid #3498db;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.03) 100%);
+}
+
+.xml-block {
+    border-left: 4px solid #9b59b6;
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.08) 0%, rgba(155, 89, 182, 0.03) 100%);
+}
+
+/* Enhanced Code Block Containers */
+.expandable-code-container {
+    margin: 1.25rem 0;
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.expandable-code-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Beautiful Block Headers */
+.block-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+}
+
+.environment-bubble .block-header {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.04) 0%, rgba(44, 62, 80, 0.08) 100%);
+    border-bottom: 1px solid rgba(44, 62, 80, 0.08);
+    color: #34495e;
+}
+
+.block-icon {
+    font-size: 1.3rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    animation: pulse 2s infinite;
+}
+
+.block-title {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    opacity: 0.95;
+}
+
+/* Content-Specific Header Colors */
+.experiment-block .block-header {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 107, 107, 0.08) 100%);
+    border-bottom: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.code-block .block-header {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(78, 205, 196, 0.08) 100%);
+    border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+.error-block .block-header {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.15) 0%, rgba(231, 76, 60, 0.08) 100%);
+    border-bottom: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.output-block .block-header {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.08) 100%);
+    border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.data-block .block-header {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.08) 100%);
+    border-bottom: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+.xml-block .block-header {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.15) 0%, rgba(155, 89, 182, 0.08) 100%);
+    border-bottom: 1px solid rgba(155, 89, 182, 0.2);
+}
+
+/* Premium Code Content Styling */
+.code-preview pre,
+.code-full pre {
+    margin: 0;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.02);
+    border: none;
+    border-radius: 0;
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    max-height: 350px;
+    overflow-y: auto;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.environment-bubble .code-preview pre,
+.environment-bubble .code-full pre {
+    background: rgba(248, 249, 250, 0.9);
+    color: #2d3748;
+}
+
+.agent-bubble .code-preview pre,
+.agent-bubble .code-full pre {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Content-Specific Code Colors */
+.experiment-block pre code {
+    color: #c0392b;
+    font-weight: 600;
+}
+
+.agent-bubble .experiment-block pre code {
+    color: #ff7675;
+}
+
+.code-block pre code {
+    color: #16a085;
+    font-weight: 600;
+}
+
+.agent-bubble .code-block pre code {
+    color: #55efc4;
+}
+
+.error-block pre code {
+    color: #e74c3c;
+    font-weight: 600;
+    background: rgba(231, 76, 60, 0.05);
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.agent-bubble .error-block pre code {
+    color: #fd79a8;
+    background: rgba(253, 121, 168, 0.1);
+}
+
+.output-block pre code {
+    color: #27ae60;
+    font-weight: 500;
+}
+
+.agent-bubble .output-block pre code {
+    color: #00b894;
+}
+
+.data-block pre code {
+    color: #2980b9;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Monaco', Menlo, monospace;
+}
+
+.agent-bubble .data-block pre code {
+    color: #74b9ff;
+}
+
+.xml-block pre code {
+    color: #8e44ad;
+    font-weight: 500;
+}
+
+.agent-bubble .xml-block pre code {
+    color: #a29bfe;
+}
+
+/* Sophisticated Button Design */
+.expand-code-btn,
+.collapse-code-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.environment-bubble .expand-code-btn,
+.environment-bubble .collapse-code-btn {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.1) 0%, rgba(44, 62, 80, 0.15) 100%);
+    color: #2c3e50;
+    border: 1px solid rgba(44, 62, 80, 0.2);
+}
+
+.expand-code-btn:hover,
+.collapse-code-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.environment-bubble .expand-code-btn:hover,
+.environment-bubble .collapse-code-btn:hover {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.15) 0%, rgba(44, 62, 80, 0.25) 100%);
+}
+
+.btn-icon {
+    font-size: 1rem;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+/* Enhanced Scrollbars */
+.code-preview pre::-webkit-scrollbar,
+.code-full pre::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.code-preview pre::-webkit-scrollbar-track,
+.code-full pre::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.code-preview pre::-webkit-scrollbar-thumb,
+.code-full pre::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.environment-bubble .code-preview pre::-webkit-scrollbar-thumb,
+.environment-bubble .code-full pre::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.2) 0%, rgba(44, 62, 80, 0.1) 100%);
+    border: 1px solid rgba(44, 62, 80, 0.1);
+}
+
+.code-full.hidden {
+    display: none;
+}
+
+/* Enhanced Animations */
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+}100%);
+}
+
+.code-block {
+    border-left: 4px solid #4ecdc4;
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.08) 0%, rgba(78, 205, 196, 0.03) /* Chatbox Styles */
 .section.chat-section {
     padding-top: 0.5rem;
     padding-bottom: 1rem;
