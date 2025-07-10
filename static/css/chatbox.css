@@ -1,48 +1,55 @@
-/* Chatbox Styles - Complete and Clean */
+/* Terminal/Code Theme - Dark Interface */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600&display=swap');
+
 .section.chat-section {
     padding-top: 0.5rem;
     padding-bottom: 1rem;
 }
 
 .chat-demo-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
     border-radius: 12px;
     padding: 1rem;
     margin: 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
     position: relative;
 }
 
 .chat-demo-title {
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #2c3e50;
+    color: #00ff00;
     font-weight: 600;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    letter-spacing: 1px;
 }
 
 .chat-container {
     max-height: 600px;
     overflow-y: auto;
-    background: white;
+    background: #0d1117;
     border-radius: 8px;
     padding: 1rem;
-    border: 1px solid #dee2e6;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #21262d;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Play Screen Styles - Enhanced */
+/* Terminal Play Screen */
 .chat-play-screen {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 500px;
     text-align: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-radius: 12px;
     margin: 1rem 0;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 255, 0, 0.2);
     position: relative;
     overflow: hidden;
+    border: 2px solid #00ff00;
 }
 
 .chat-play-screen::before {
@@ -52,8 +59,43 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.03) 2px,
+            rgba(0, 255, 0, 0.03) 4px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.03) 2px,
+            rgba(0, 255, 0, 0.03) 4px
+        );
+    pointer-events: none;
+}
+
+.chat-play-screen::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 0, 0.1),
+        transparent
+    );
+    animation: terminal-scan 3s linear infinite;
+}
+
+@keyframes terminal-scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
 }
 
 .play-content {
@@ -61,70 +103,101 @@
     padding: 3rem 2rem;
     position: relative;
     z-index: 1;
-    color: white;
+    color: #00ff00;
 }
 
 .play-icon {
     font-size: 5rem;
     margin-bottom: 1.5rem;
-    animation: pulse 2s infinite;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: terminal-blink 2s infinite;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.7));
+    font-family: 'JetBrains Mono', monospace;
+}
+
+@keyframes terminal-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
 }
 
 .play-content h3 {
-    color: white;
+    color: #00ff00;
     margin-bottom: 1.5rem;
-    font-size: 2rem;
-    font-weight: 700;
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
     line-height: 1.2;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    letter-spacing: 1px;
 }
 
 .play-content p {
-    color: rgba(255, 255, 255, 0.9);
+    color: #7dd3fc;
     margin-bottom: 2.5rem;
     line-height: 1.6;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 400;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-family: 'Fira Code', monospace;
+    text-shadow: 0 0 5px rgba(125, 211, 252, 0.3);
 }
 
 .play-button {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2) 0%, rgba(0, 255, 0, 0.1) 100%);
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
     padding: 1.25rem 3rem;
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
     margin-bottom: 1.5rem;
-    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.play-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 0, 0.2),
+        transparent
+    );
+    transition: left 0.5s ease;
+}
+
+.play-button:hover::before {
+    left: 100%;
 }
 
 .play-button:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.3) 0%, rgba(0, 255, 0, 0.2) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    border-color: #7dd3fc;
+    color: #7dd3fc;
 }
 
 .demo-info {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1rem;
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 400;
+    font-family: 'Fira Code', monospace;
+    text-shadow: 0 0 3px rgba(107, 114, 128, 0.3);
 }
 
-/* Control Panel Styles */
+/* Terminal Control Panel */
 .chat-controls {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
     border-radius: 8px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -132,126 +205,138 @@
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
-    border: 1px solid #dee2e6;
+    border: 1px solid #21262d;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .control-btn {
-    background: #007bff;
-    color: white;
+    background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+    color: #000000;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
 .control-btn:hover {
-    background: #0056b3;
+    background: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 100%);
     transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(125, 211, 252, 0.5);
 }
 
 .pause-btn {
-    background: #ffc107;
-    color: #212529;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #000000;
 }
 
 .pause-btn:hover {
-    background: #e0a800;
+    background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
 }
 
 .speed-btn {
-    background: #28a745;
+    background: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 100%);
+    color: #000000;
 }
 
 .speed-btn:hover {
-    background: #1e7e34;
+    background: linear-gradient(135deg, #a5f3fc 0%, #06b6d4 100%);
+    box-shadow: 0 0 15px rgba(125, 211, 252, 0.5);
 }
 
 .restart-btn {
-    background: #6c757d;
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: #ffffff;
 }
 
 .restart-btn:hover {
-    background: #545b62;
+    background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    box-shadow: 0 0 15px rgba(107, 114, 128, 0.5);
 }
 
-/* Progress Bar */
+/* Terminal Progress Bar */
 .progress-bar {
     flex: 1;
     height: 8px;
-    background: #dee2e6;
+    background: #21262d;
     border-radius: 4px;
     overflow: hidden;
     margin-left: 1rem;
+    border: 1px solid #00ff00;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #007bff 0%, #28a745 100%);
+    background: linear-gradient(90deg, #00ff00 0%, #7dd3fc 100%);
     width: 0%;
     transition: width 0.3s ease;
     border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
-/* Completion Message */
-.completion-message {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex: 1;
-    color: #28a745;
-    font-weight: 600;
-}
-
-.completion-icon {
-    font-size: 1.5rem;
-}
-
-/* Messages Container */
+/* Terminal Messages Container */
 .chat-messages-container {
     max-height: calc(600px - 100px);
     overflow-y: auto;
     padding: 1rem;
-    background: #f8f9fa;
+    background: #0d1117;
     border-radius: 8px;
+    border: 1px solid #21262d;
 }
 
-/* Enhanced Chat Interface with Superior Aesthetics */
+/* Terminal Chat Bubbles */
 .chat-bubble {
     margin-bottom: 1.5rem;
     max-width: 85%;
     position: relative;
-    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: terminal-fadeIn 0.5s ease;
     transition: all 0.3s ease;
 }
 
+@keyframes terminal-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .chat-bubble:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    filter: drop-shadow(0 4px 20px rgba(0, 255, 0, 0.1));
 }
 
 .agent-bubble {
     margin-left: auto;
     margin-right: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 24px 24px 8px 24px;
+    background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+    color: #000000;
+    border-radius: 12px 12px 4px 12px;
     padding: 0;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 255, 0, 0.3);
+    border: 1px solid #00ff00;
 }
 
 .environment-bubble {
     margin-left: 1rem;
     margin-right: auto;
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    color: #2c3e50;
-    border-radius: 24px 24px 24px 8px;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: #7dd3fc;
+    border-radius: 12px 12px 12px 4px;
     padding: 0;
-    box-shadow: 0 4px 20px rgba(252, 182, 159, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(125, 211, 252, 0.2);
+    border: 1px solid #7dd3fc;
 }
 
 .message-header {
@@ -259,12 +344,12 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 1.5rem 0.75rem 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .environment-bubble .message-header {
-    border-bottom: 1px solid rgba(44, 62, 80, 0.1);
+    border-bottom: 1px solid rgba(125, 211, 252, 0.3);
 }
 
 .message-avatar {
@@ -274,23 +359,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.2);
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .environment-bubble .message-avatar {
-    background: linear-gradient(135deg, rgba(44, 62, 80, 0.1) 0%, rgba(44, 62, 80, 0.05) 100%);
+    background: rgba(125, 211, 252, 0.1);
+    border: 1px solid rgba(125, 211, 252, 0.3);
 }
 
 .message-name {
     font-weight: 700;
-    font-size: 0.95rem;
-    opacity: 0.95;
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    letter-spacing: 0.3px;
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .message-content {
@@ -300,37 +386,40 @@
 .message-text {
     line-height: 1.6;
     margin-bottom: 1rem;
-    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    font-size: 0.95rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    font-weight: 400;
 }
 
 .message-text:last-child {
     margin-bottom: 0;
 }
 
-/* Typing Indicator */
+/* Terminal Typing Indicator */
 .typing-indicator {
     display: flex;
     align-items: center;
     gap: 4px;
     padding: 1rem;
-    color: #6c757d;
+    color: #6b7280;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .typing-indicator span {
     height: 8px;
     width: 8px;
-    border-radius: 50%;
-    background: #6c757d;
+    border-radius: 2px;
+    background: #00ff00;
     display: inline-block;
-    animation: typing 1.4s infinite ease-in-out;
+    animation: terminal-typing 1.4s infinite ease-in-out;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
 
 .typing-indicator span:nth-child(1) { animation-delay: 0.0s; }
 .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-@keyframes typing {
+@keyframes terminal-typing {
     0%, 80%, 100% { 
         transform: scale(0.8);
         opacity: 0.5;
@@ -341,119 +430,111 @@
     }
 }
 
-/* Content Type Specific Styling */
-.experiment-block {
-    border-left: 4px solid #ff6b6b;
-    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 107, 107, 0.03) 100%);
-}
-
-.code-block {
-    border-left: 4px solid #4ecdc4;
-    background: linear-gradient(135deg, rgba(78, 205, 196, 0.08) 0%, rgba(78, 205, 196, 0.03) 100%);
-}
-
-.error-block {
-    border-left: 4px solid #e74c3c;
-    background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.03) 100%);
-}
-
-.output-block {
-    border-left: 4px solid #2ecc71;
-    background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.03) 100%);
-}
-
-.data-block {
-    border-left: 4px solid #3498db;
-    background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.03) 100%);
-}
-
-.xml-block {
-    border-left: 4px solid #9b59b6;
-    background: linear-gradient(135deg, rgba(155, 89, 182, 0.08) 0%, rgba(155, 89, 182, 0.03) 100%);
-}
-
-/* Enhanced Code Block Containers */
+/* Terminal Code Blocks */
 .expandable-code-container {
     margin: 1.25rem 0;
-    border-radius: 16px;
+    border-radius: 8px;
     overflow: hidden;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #161b22;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border: 1px solid #21262d;
+    transition: all 0.3s ease;
 }
 
 .expandable-code-container:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: #00ff00;
+    box-shadow: 0 8px 32px rgba(0, 255, 0, 0.1);
 }
 
-/* Beautiful Block Headers */
+/* Content Type Colors */
+.experiment-block {
+    border-left: 4px solid #fbbf24;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.05) 100%);
+}
+
+.code-block {
+    border-left: 4px solid #00ff00;
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.1) 0%, rgba(0, 255, 0, 0.05) 100%);
+}
+
+.error-block {
+    border-left: 4px solid #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+}
+
+.output-block {
+    border-left: 4px solid #7dd3fc;
+    background: linear-gradient(135deg, rgba(125, 211, 252, 0.1) 0%, rgba(125, 211, 252, 0.05) 100%);
+}
+
+.data-block {
+    border-left: 4px solid #a78bfa;
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(167, 139, 250, 0.05) 100%);
+}
+
+.xml-block {
+    border-left: 4px solid #fb7185;
+    background: linear-gradient(135deg, rgba(251, 113, 133, 0.1) 0%, rgba(251, 113, 133, 0.05) 100%);
+}
+
+/* Terminal Block Headers */
 .block-header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 1rem 1.5rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-    backdrop-filter: blur(10px);
-}
-
-.environment-bubble .block-header {
-    background: linear-gradient(135deg, rgba(44, 62, 80, 0.04) 0%, rgba(44, 62, 80, 0.08) 100%);
-    border-bottom: 1px solid rgba(44, 62, 80, 0.08);
-    color: #34495e;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #21262d;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #7dd3fc;
 }
 
 .block-icon {
-    font-size: 1.3rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    animation: pulse 2s infinite;
+    font-size: 1.1rem;
+    filter: drop-shadow(0 0 5px currentColor);
 }
 
 .block-title {
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    opacity: 0.95;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 /* Content-Specific Header Colors */
 .experiment-block .block-header {
-    background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 107, 107, 0.08) 100%);
-    border-bottom: 1px solid rgba(255, 107, 107, 0.2);
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
 }
 
 .code-block .block-header {
-    background: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(78, 205, 196, 0.08) 100%);
-    border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+    color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
 }
 
 .error-block .block-header {
-    background: linear-gradient(135deg, rgba(231, 76, 60, 0.15) 0%, rgba(231, 76, 60, 0.08) 100%);
-    border-bottom: 1px solid rgba(231, 76, 60, 0.2);
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
 }
 
 .output-block .block-header {
-    background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.08) 100%);
-    border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+    color: #7dd3fc;
+    background: rgba(125, 211, 252, 0.1);
 }
 
 .data-block .block-header {
-    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.08) 100%);
-    border-bottom: 1px solid rgba(52, 152, 219, 0.2);
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.1);
 }
 
 .xml-block .block-header {
-    background: linear-gradient(135deg, rgba(155, 89, 182, 0.15) 0%, rgba(155, 89, 182, 0.08) 100%);
-    border-bottom: 1px solid rgba(155, 89, 182, 0.2);
+    color: #fb7185;
+    background: rgba(251, 113, 133, 0.1);
 }
 
-/* Premium Code Content Styling */
+/* Terminal Code Content */
 .code-preview,
 .code-full {
     position: relative;
@@ -462,222 +543,153 @@
 .code-preview pre,
 .code-full pre {
     margin: 0;
-    padding: 1.5rem;
-    background: rgba(0, 0, 0, 0.02);
+    padding: 1rem;
+    background: #0d1117;
     border: none;
     border-radius: 0;
-    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
     overflow-x: auto;
-    max-height: 350px;
+    max-height: 300px;
     overflow-y: auto;
-    font-weight: 500;
-    letter-spacing: 0.3px;
+    font-weight: 400;
+    color: #7dd3fc;
 }
 
-.environment-bubble .code-preview pre,
-.environment-bubble .code-full pre {
-    background: rgba(248, 249, 250, 0.9);
-    color: #2d3748;
-}
-
-.agent-bubble .code-preview pre,
-.agent-bubble .code-full pre {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.95);
-}
-
-/* Content-Specific Code Colors - Fixed for Better Contrast */
+/* Content-Specific Code Colors */
 .experiment-block pre code {
-    color: #d63031;
-    font-weight: 600;
-}
-
-.agent-bubble .experiment-block pre code {
-    color: #fab1a0;
+    color: #fbbf24;
+    font-weight: 500;
 }
 
 .code-block pre code {
-    color: #00b894;
-    font-weight: 600;
-}
-
-.agent-bubble .code-block pre code {
-    color: #81ecec;
+    color: #00ff00;
+    font-weight: 500;
 }
 
 .error-block pre code {
-    color: #d63031;
-    font-weight: 600;
-    background: rgba(214, 48, 49, 0.1);
+    color: #ef4444;
+    font-weight: 500;
+    background: rgba(239, 68, 68, 0.1);
     padding: 0.5rem;
-    border-radius: 8px;
-}
-
-.agent-bubble .error-block pre code {
-    color: #fab1a0;
-    background: rgba(250, 177, 160, 0.15);
+    border-radius: 4px;
+    border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .output-block pre code {
-    color: #00b894;
-    font-weight: 500;
-}
-
-.agent-bubble .output-block pre code {
-    color: #55efc4;
+    color: #7dd3fc;
+    font-weight: 400;
 }
 
 .data-block pre code {
-    color: #0984e3;
-    font-weight: 500;
-    font-family: 'SF Mono', 'Monaco', Menlo, monospace;
-}
-
-.agent-bubble .data-block pre code {
-    color: #74b9ff;
+    color: #a78bfa;
+    font-weight: 400;
 }
 
 .xml-block pre code {
-    color: #6c5ce7;
-    font-weight: 500;
+    color: #fb7185;
+    font-weight: 400;
 }
 
-.agent-bubble .xml-block pre code {
-    color: #a29bfe;
-}
-
-/* Sophisticated Button Design */
+/* Terminal Buttons */
 .expand-code-btn,
 .collapse-code-btn {
     position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 0.75rem 1rem;
-    font-size: 0.8rem;
-    font-weight: 700;
+    top: 0.75rem;
+    right: 1rem;
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
     z-index: 10;
-    backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    letter-spacing: 0.3px;
+    gap: 0.3rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.environment-bubble .expand-code-btn,
-.environment-bubble .collapse-code-btn {
-    background: linear-gradient(135deg, rgba(44, 62, 80, 0.1) 0%, rgba(44, 62, 80, 0.15) 100%);
-    color: #2c3e50;
-    border: 1px solid rgba(44, 62, 80, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
 .expand-code-btn:hover,
 .collapse-code-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.environment-bubble .expand-code-btn:hover,
-.environment-bubble .collapse-code-btn:hover {
-    background: linear-gradient(135deg, rgba(44, 62, 80, 0.15) 0%, rgba(44, 62, 80, 0.25) 100%);
+    background: rgba(0, 255, 0, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
 }
 
 .btn-icon {
-    font-size: 1rem;
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+    font-size: 0.8rem;
+    filter: drop-shadow(0 0 3px currentColor);
 }
 
 .code-full.hidden {
     display: none;
 }
 
-/* Enhanced Scrollbars */
+/* Terminal Scrollbars */
 .chat-container::-webkit-scrollbar,
-.chat-messages-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.chat-container::-webkit-scrollbar-track,
-.chat-messages-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.chat-container::-webkit-scrollbar-thumb,
-.chat-messages-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
-}
-
-.chat-container::-webkit-scrollbar-thumb:hover,
-.chat-messages-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-
+.chat-messages-container::-webkit-scrollbar,
 .code-preview pre::-webkit-scrollbar,
 .code-full pre::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
+.chat-container::-webkit-scrollbar-track,
+.chat-messages-container::-webkit-scrollbar-track,
 .code-preview pre::-webkit-scrollbar-track,
 .code-full pre::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
+    background: #161b22;
     border-radius: 4px;
 }
 
+.chat-container::-webkit-scrollbar-thumb,
+.chat-messages-container::-webkit-scrollbar-thumb,
 .code-preview pre::-webkit-scrollbar-thumb,
 .code-full pre::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+    background: #00ff00;
     border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #21262d;
 }
 
-.environment-bubble .code-preview pre::-webkit-scrollbar-thumb,
-.environment-bubble .code-full pre::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, rgba(44, 62, 80, 0.2) 0%, rgba(44, 62, 80, 0.1) 100%);
-    border: 1px solid rgba(44, 62, 80, 0.1);
+.chat-container::-webkit-scrollbar-thumb:hover,
+.chat-messages-container::-webkit-scrollbar-thumb:hover,
+.code-preview pre::-webkit-scrollbar-thumb:hover,
+.code-full pre::-webkit-scrollbar-thumb:hover {
+    background: #7dd3fc;
+    box-shadow: 0 0 5px rgba(125, 211, 252, 0.5);
 }
 
-/* Enhanced Animations */
-@keyframes pulse {
-    0%, 100% { 
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% { 
-        transform: scale(1.05);
-        opacity: 0.8;
-    }
+/* Completion Message */
+.completion-message {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    color: #00ff00;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.completion-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.7));
 }
 
-/* Loading state */
+/* Loading State */
 .chat-loading {
     text-align: center;
     padding: 2rem;
-    color: #6c757d;
+    color: #00ff00;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .chat-loading::after {
@@ -685,39 +697,43 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 2px solid #6c757d;
+    border: 2px solid #00ff00;
     border-top: 2px solid transparent;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: terminal-spin 1s linear infinite;
     margin-left: 0.5rem;
 }
 
-@keyframes spin {
+@keyframes terminal-spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* Fullscreen Mode Styles */
+/* Fullscreen Mode */
 .fullscreen-toggle-btn {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: #007bff;
-    color: white;
+    background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+    color: #000000;
     border: none;
     border-radius: 4px;
     padding: 0.4rem 0.8rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 100;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
 .fullscreen-toggle-btn:hover {
-    background: #0056b3;
+    background: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 100%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 15px rgba(125, 211, 252, 0.5);
 }
 
 .chat-demo-section.fullscreen {
@@ -730,7 +746,7 @@
     margin: 0;
     border-radius: 0;
     padding: 1rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
     overflow: hidden;
 }
 
@@ -748,7 +764,6 @@
     font-size: 1.5rem;
 }
 
-/* Hide other content when in fullscreen */
 body.fullscreen-active {
     overflow: hidden;
 }
@@ -763,7 +778,7 @@ body.fullscreen-active .fullscreen-overlay {
     z-index: 9998;
 }
 
-/* Responsive design for chat bubbles */
+/* Responsive Design */
 @media (max-width: 768px) {
     .chat-bubble {
         max-width: 90%;
@@ -798,7 +813,7 @@ body.fullscreen-active .fullscreen-overlay {
     }
     
     .play-content {
-        padding: 1rem;
+        padding: 2rem 1rem;
     }
     
     .play-icon {
@@ -806,11 +821,11 @@ body.fullscreen-active .fullscreen-overlay {
     }
     
     .play-content h3 {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
     
     .play-button {
-        padding: 0.8rem 1.5rem;
+        padding: 1rem 2rem;
         font-size: 1rem;
     }
 }
