@@ -503,31 +503,69 @@ class ChatboxParser {
         const container = document.createElement('div');
         container.className = 'expandable-code-container';
         
-        // Determine block characteristics
+        // Determine block characteristics and styling
         const lines = code.split('\n');
-        let isLong, previewLines, buttonText, collapseText;
+        let isLong, previewLines, buttonText, collapseText, blockType;
         
         if (language === 'xml') {
             isLong = lines.length > 8;
             previewLines = lines.slice(0, 6);
-            buttonText = '📋 View Full SBML';
-            collapseText = '📋 Collapse SBML';
+            buttonText = '🧬 View Full SBML Model';
+            collapseText = '🧬 Collapse SBML';
+            blockType = 'xml-block';
         } else if (language === 'text' && code.includes('Time')) {
             isLong = lines.length > 10;
             previewLines = lines.slice(0, 8);
-            buttonText = '📊 View Full Data';
+            buttonText = '📊 View Full Experiment Data';
             collapseText = '📊 Collapse Data';
-        } else {
+            blockType = 'data-block';
+        } else if (language === 'python' || language === 'code') {
             isLong = lines.length > 5;
             previewLines = lines.slice(0, 4);
-            buttonText = '📄 View Full Code';
-            collapseText = '📄 Collapse Code';
+            buttonText = '💻 View Full Code';
+            collapseText = '💻 Collapse Code';
+            blockType = 'code-block';
+        } else {
+            isLong = lines.length > 6;
+            previewLines = lines.slice(0, 5);
+            buttonText = '📄 View Full Content';
+            collapseText = '📄 Collapse Content';
+            blockType = 'text-block';
         }
+        
+        // Add block type class for specific styling
+        container.classList.add(blockType);
         
         const preview = previewLines.join('\n');
         
         const previewDiv = document.createElement('div');
         previewDiv.className = 'code-preview';
+        
+        // Add block type header
+        const blockHeader = document.createElement('div');
+        blockHeader.className = 'block-header';
+        let headerIcon, headerText;
+        
+        switch (blockType) {
+            case 'xml-block':
+                headerIcon = '🧬';
+                headerText = 'SBML Model';
+                break;
+            case 'data-block':
+                headerIcon = '📊';
+                headerText = 'Experiment Data';
+                break;
+            case 'code-block':
+                headerIcon = '💻';
+                headerText = 'Python Code';
+                break;
+            default:
+                headerIcon = '📄';
+                headerText = 'Content';
+        }
+        
+        blockHeader.innerHTML = `<span class="block-icon">${headerIcon}</span><span class="block-title">${headerText}</span>`;
+        previewDiv.appendChild(blockHeader);
         
         const previewCode = document.createElement('pre');
         previewCode.innerHTML = `<code class="language-${language}">${this.escapeHtml(preview)}${isLong ? '\n...' : ''}</code>`;
@@ -536,7 +574,7 @@ class ChatboxParser {
         if (isLong) {
             const expandBtn = document.createElement('button');
             expandBtn.className = 'expand-code-btn';
-            expandBtn.textContent = buttonText;
+            expandBtn.innerHTML = `<span class="btn-icon">${headerIcon}</span><span>${buttonText}</span>`;
             expandBtn.onclick = () => this.expandCode(container);
             previewDiv.appendChild(expandBtn);
         }
@@ -548,13 +586,18 @@ class ChatboxParser {
             const fullDiv = document.createElement('div');
             fullDiv.className = 'code-full hidden';
             
+            const fullHeader = document.createElement('div');
+            fullHeader.className = 'block-header';
+            fullHeader.innerHTML = `<span class="block-icon">${headerIcon}</span><span class="block-title">${headerText} (Full)</span>`;
+            fullDiv.appendChild(fullHeader);
+            
             const fullCode = document.createElement('pre');
             fullCode.innerHTML = `<code class="language-${language}">${this.escapeHtml(code)}</code>`;
             fullDiv.appendChild(fullCode);
             
             const collapseBtn = document.createElement('button');
             collapseBtn.className = 'collapse-code-btn';
-            collapseBtn.textContent = collapseText;
+            collapseBtn.innerHTML = `<span class="btn-icon">📖</span><span>${collapseText}</span>`;
             collapseBtn.onclick = () => this.collapseCode(container);
             fullDiv.appendChild(collapseBtn);
             
