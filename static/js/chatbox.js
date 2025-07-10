@@ -14,9 +14,17 @@ class ChatboxParser {
             console.log('Loading chat history from file...');
             const response = await fetch('./static/chat/chat_history_demo.txt');
             this.chatHistory = await response.text();
-            console.log('Chat history loaded, parsing...');
+            console.log('Chat history loaded, length:', this.chatHistory.length);
+            console.log('First 500 characters:', this.chatHistory.substring(0, 500));
             this.parseChatHistory();
             console.log('Parsed', this.parsedMessages.length, 'messages');
+            
+            // Debug: Show first few parsed messages
+            console.log('First parsed message:', this.parsedMessages[0]);
+            if (this.parsedMessages.length > 1) {
+                console.log('Second parsed message:', this.parsedMessages[1]);
+            }
+            
             this.initializeChatbox();
         } catch (error) {
             console.error('Error loading chat history:', error);
@@ -33,36 +41,36 @@ class ChatboxParser {
                 type: 'environment',
                 section: 'task_setup',
                 content: [
-                    { type: 'text', content: ['Welcome to SciGym! You are tasked with discovering the missing reactions in a biological system.'] }
+                    { type: 'text', content: ['Welcome to SciGym! You are tasked with discovering the missing reactions in a biological system.'], subSection: null }
                 ]
             },
             {
                 type: 'agent',
                 section: 'thoughts',
                 content: [
-                    { type: 'text', content: ['I need to analyze the given SBML model and understand what reactions might be missing. Let me start by examining the current model structure.'] }
+                    { type: 'text', content: ['I need to analyze the given SBML model and understand what reactions might be missing. Let me start by examining the current model structure.'], subSection: null }
                 ]
             },
             {
                 type: 'agent',
                 section: 'action',
                 content: [
-                    { type: 'code', content: 'import pandas as pd\nimport numpy as np\nprint("Starting analysis...")', language: 'python' }
+                    { type: 'code', content: ['import pandas as pd', 'import numpy as np', 'print("Starting analysis...")'], language: 'python', subSection: 'code' }
                 ]
             },
             {
                 type: 'environment',
                 section: 'experiment_result',
                 content: [
-                    { type: 'text', content: ['Experiment completed successfully!'] },
-                    { type: 'experimental_data', content: ['Time,Species_A,Species_B', '0,1.0,0.5', '1,1.2,0.6', '2,1.4,0.7'] }
+                    { type: 'text', content: ['Experiment completed successfully!'], subSection: 'experiment_result' },
+                    { type: 'experimental_data', content: ['Time,Species_A,Species_B', '0,1.0,0.5', '1,1.2,0.6', '2,1.4,0.7'], subSection: 'experiment_result' }
                 ]
             },
             {
                 type: 'agent',
                 section: 'thoughts',
                 content: [
-                    { type: 'text', content: ['Based on the experimental data, I can see that both species are increasing over time. This suggests a production reaction might be missing.'] }
+                    { type: 'text', content: ['Based on the experimental data, I can see that both species are increasing over time. This suggests a production reaction might be missing.'], subSection: null }
                 ]
             }
         ];
@@ -349,10 +357,19 @@ class ChatboxParser {
     
     addMessage(messageInfo, content) {
         if (content.length > 0) {
+            console.log('Adding message:', messageInfo.type, messageInfo.section, 'with', content.length, 'content items');
+            
+            // Debug: Log content structure
+            content.forEach((item, idx) => {
+                console.log(`  Content ${idx}: type=${item.type}, subSection=${item.subSection}, contentLength=${Array.isArray(item.content) ? item.content.length : typeof item.content}`);
+            });
+            
             this.parsedMessages.push({
                 ...messageInfo,
                 content: content
             });
+        } else {
+            console.log('Skipping empty message:', messageInfo.type, messageInfo.section);
         }
     }
 
@@ -554,13 +571,19 @@ class ChatboxParser {
                 textDiv.innerHTML = item.content.join('<br>');
                 contentDiv.appendChild(textDiv);
             } else if (item.type === 'code') {
-                const codeContainer = this.createCodeBlock(item.content.join('\n'), item.language, item.subSection);
+                // Handle both array and string content for backward compatibility
+                const codeContent = Array.isArray(item.content) ? item.content.join('\n') : item.content;
+                const codeContainer = this.createCodeBlock(codeContent, item.language, item.subSection);
                 contentDiv.appendChild(codeContainer);
             } else if (item.type === 'xml') {
-                const xmlContainer = this.createCodeBlock(item.content, item.language, item.subSection);
+                // Handle both array and string content for backward compatibility
+                const xmlContent = Array.isArray(item.content) ? item.content.join('\n') : item.content;
+                const xmlContainer = this.createCodeBlock(xmlContent, item.language, item.subSection);
                 contentDiv.appendChild(xmlContainer);
             } else if (item.type === 'experimental_data') {
-                const dataContainer = this.createCodeBlock(item.content.join('\n'), 'text', item.subSection);
+                // Handle both array and string content for backward compatibility
+                const dataContent = Array.isArray(item.content) ? item.content.join('\n') : item.content;
+                const dataContainer = this.createCodeBlock(dataContent, 'text', item.subSection);
                 contentDiv.appendChild(dataContainer);
             }
         });
