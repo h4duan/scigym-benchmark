@@ -148,14 +148,32 @@ class ChatboxParser {
             // Parse subsections for environment responses
             if (currentMessage && currentMessage.type === 'environment') {
                 if (line.match(/^## Code Stderror/)) {
+                    // Finish current content and start new message for code error
+                    if (currentContent.length > 0) {
+                        this.addMessage(currentMessage, currentContent);
+                    }
+                    currentMessage = { type: 'environment', section: 'code_error' };
+                    currentContent = [];
                     currentSubSection = 'code_error';
                     continue;
                 }
                 if (line.match(/^## Code Stdout/)) {
+                    // Finish current content and start new message for code output
+                    if (currentContent.length > 0) {
+                        this.addMessage(currentMessage, currentContent);
+                    }
+                    currentMessage = { type: 'environment', section: 'code_output' };
+                    currentContent = [];
                     currentSubSection = 'code_output';
                     continue;
                 }
                 if (line.match(/^## Experiment Result/)) {
+                    // Finish current content and start new message for experiment result
+                    if (currentContent.length > 0) {
+                        this.addMessage(currentMessage, currentContent);
+                    }
+                    currentMessage = { type: 'environment', section: 'experiment_result' };
+                    currentContent = [];
                     currentSubSection = 'experiment_result';
                     continue;
                 }
