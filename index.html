@@ -18,6 +18,7 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/chatbox.css">
   <link rel="icon" href="./static/images/favicon.ico">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -25,6 +26,7 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+  <script src="./static/js/chatbox.js"></script>
 </head>
 <body>
 
@@ -118,6 +120,27 @@
   </div>
 </section>
 
+<!-- Interactive Chat Demo -->
+<section class="section chat-section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="chat-demo-section" id="chat-demo-section">
+          <button class="fullscreen-toggle-btn" id="fullscreen-btn" onclick="toggleFullscreen()">
+            <span id="fullscreen-icon">⛶</span> <span id="fullscreen-text">Fullscreen</span>
+          </button>
+          <h3 class="title is-4 chat-demo-title">🤖 Interactive SciGym Demo: LLM Agent Scientific Discovery</h3>
+          <p class="has-text-centered" style="margin-bottom: 1rem;">
+            Watch how an LLM agent iteratively designs experiments, analyzes data, and discovers biological mechanisms in our Systems Biology environment.
+          </p>
+          <div class="chat-container" id="chat-container">
+            <div class="chat-loading">Loading chat history...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section">
   <div class="container is-max-desktop">
