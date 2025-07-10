@@ -210,6 +210,17 @@ class ChatboxParser {
                 continue;
             }
             
+            // Skip reminder and other sections we don't want
+            if (line.match(/^## Reminder/)) {
+                // Skip the reminder section entirely
+                let j = i + 1;
+                while (j < lines.length && !lines[j].match(/^##/)) {
+                    j++;
+                }
+                i = j - 1; // Set i to the line before the next section
+                continue;
+            }
+            
             // Skip other headers
             if (line.match(/^### Allowed libraries/)) {
                 continue;
@@ -262,12 +273,24 @@ class ChatboxParser {
             if (inCodeBlock) {
                 codeBlock.push(line);
             } else if (currentMessage && line.trim()) {
-                // Handle experimental data or regular text based on subsection
+                // Handle content based on current subsection
                 if (currentSubSection === 'experiment_result' && (line.match(/^Time\s+id_/) || line.match(/^\d+/) || line.match(/^\d+\.\d+e[+-]\d+/) || line.match(/^\.\.\./))) {
+                    // This is experimental data content
                     if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'experimental_data') {
                         currentContent.push({ 
                             type: 'experimental_data', 
                             content: [],
+                            subSection: currentSubSection 
+                        });
+                    }
+                    currentContent[currentContent.length - 1].content.push(line);
+                } else if ((currentSubSection === 'code_error' || currentSubSection === 'code_output') && line.trim()) {
+                    // For code errors and outputs, treat all content as code
+                    if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'code' || currentContent[currentContent.length - 1].subSection !== currentSubSection) {
+                        currentContent.push({ 
+                            type: 'code', 
+                            content: [],
+                            language: 'text',
                             subSection: currentSubSection 
                         });
                     }
@@ -499,7 +522,7 @@ class ChatboxParser {
                 textDiv.innerHTML = item.content.join('<br>');
                 contentDiv.appendChild(textDiv);
             } else if (item.type === 'code') {
-                const codeContainer = this.createCodeBlock(item.content, item.language, item.subSection);
+                const codeContainer = this.createCodeBlock(item.content.join('\n'), item.language, item.subSection);
                 contentDiv.appendChild(codeContainer);
             } else if (item.type === 'xml') {
                 const xmlContainer = this.createCodeBlock(item.content, item.language, item.subSection);
