@@ -1,7 +1,33 @@
 // Self-contained chatbox that doesn't need external files
 class ChatboxParser {
     constructor() {
-        // Embedded sample chat data for testing
+        this.chatHistory = '';
+        this.parsedMessages = [];
+        this.isPlaying = false;
+        this.currentMessageIndex = 0;
+        this.playbackSpeed = 3000; // Much slower - 3 seconds between messages
+        this.playbackTimeout = null;
+    }
+
+    async loadChatHistory() {
+        try {
+            console.log('Loading chat history from file...');
+            const response = await fetch('./static/chat/chat_history_demo.txt');
+            this.chatHistory = await response.text();
+            console.log('Chat history loaded, parsing...');
+            this.parseChatHistory();
+            console.log('Parsed', this.parsedMessages.length, 'messages');
+            this.initializeChatbox();
+        } catch (error) {
+            console.error('Error loading chat history:', error);
+            console.log('Falling back to sample data...');
+            this.createSampleData();
+            this.initializeChatbox();
+        }
+    }
+
+    createSampleData() {
+        // Fallback sample data if file loading fails
         this.parsedMessages = [
             {
                 type: 'environment',
@@ -40,13 +66,202 @@ class ChatboxParser {
                 ]
             }
         ];
+    }
+
+    parseChatHistory() {
+        const lines = this.chatHistory.split('\n');
+        let currentMessage = null;
+        let currentContent = [];
+        let inCodeBlock = false;
+        let codeBlock = [];
+        let currentCodeLanguage = '';
+        let inXMLBlock = false;
+        let xmlBlock = [];
+        let hasStarted = false;
         
-        this.isPlaying = false;
-        this.currentMessageIndex = 0;
-        this.playbackSpeed = 3000; // Much slower - 3 seconds between messages
-        this.playbackTimeout = null;
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            
+            // Initialize with first content if we haven't started yet
+            if (!hasStarted && line.trim()) {
+                currentMessage = { type: 'environment', section: 'task_setup' };
+                currentContent = [];
+                hasStarted = true;
+            }
+            
+            // Check for iteration markers - these start new sections
+            if (line.match(/^# Iteration/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                // Don't create a new message here, let the content sections handle it
+                currentMessage = null;
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for agent messages (thoughts and actions)
+            if (line.match(/^## Thoughts/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'agent', section: 'thoughts' };
+                currentContent = [];
+                continue;
+            }
+            
+            if (line.match(/^## Action/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'agent', section: 'action' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for environment messages
+            if (line.match(/^# Observation/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'environment', section: 'observation' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for experiment results (separate message type)
+            if (line.match(/^## Experiment Result/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'environment', section: 'experiment_result' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for code execution errors
+            if (line.match(/^## Code Stderror/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'environment', section: 'code_error' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for task info sections  
+            if (line.match(/^## Task Info/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'environment', section: 'task_info' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for SBML model sections
+            if (line.match(/^## Incomplete SBML Model/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'environment', section: 'sbml_model' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Check for max iterations and other setup info
+            if (line.match(/^## Max iterations/)) {
+                if (currentMessage) {
+                    this.addMessage(currentMessage, currentContent);
+                }
+                currentMessage = { type: 'environment', section: 'iteration_info' };
+                currentContent = [];
+                continue;
+            }
+            
+            // Skip headers that aren't part of main content
+            if (line.match(/^### Experiment|^### Code|^### Allowed libraries/)) {
+                continue;
+            }
+            
+            // Handle XML blocks (SBML content)
+            if (line.match(/^<\?xml/) || line.match(/^<sbml/)) {
+                inXMLBlock = true;
+                xmlBlock = [line];
+                continue;
+            }
+            
+            if (inXMLBlock) {
+                xmlBlock.push(line);
+                if (line.match(/^<\/sbml>/)) {
+                    // End of XML block
+                    currentContent.push({
+                        type: 'xml',
+                        content: xmlBlock.join('\n'),
+                        language: 'xml'
+                    });
+                    xmlBlock = [];
+                    inXMLBlock = false;
+                }
+                continue;
+            }
+            
+            // Handle code blocks
+            if (line.match(/^```/)) {
+                if (inCodeBlock) {
+                    // End of code block
+                    if (codeBlock.length > 0) {
+                        currentContent.push({
+                            type: 'code',
+                            content: codeBlock.join('\n'),
+                            language: currentCodeLanguage
+                        });
+                    }
+                    codeBlock = [];
+                    inCodeBlock = false;
+                    currentCodeLanguage = '';
+                } else {
+                    // Start of code block
+                    currentCodeLanguage = line.replace(/```/g, '').trim() || 'text';
+                    inCodeBlock = true;
+                    codeBlock = [];
+                }
+                continue;
+            }
+            
+            if (inCodeBlock) {
+                codeBlock.push(line);
+            } else if (currentMessage && line.trim()) {
+                // Check if this looks like CSV/experimental data table content
+                if (line.match(/^Time\s+id_/) || line.match(/^\d+/) || line.match(/^\d+\.\d+e[+-]\d+/) || line.match(/^\.\.\./)) {
+                    // This is experimental data content
+                    if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'experimental_data') {
+                        currentContent.push({ type: 'experimental_data', content: [] });
+                    }
+                    currentContent[currentContent.length - 1].content.push(line);
+                } else {
+                    // Regular text content - only add non-empty lines
+                    if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'text') {
+                        currentContent.push({ type: 'text', content: [] });
+                    }
+                    currentContent[currentContent.length - 1].content.push(line);
+                }
+            }
+        }
         
-        console.log('ChatboxParser initialized with', this.parsedMessages.length, 'messages');
+        // Add final message if exists
+        if (currentMessage && currentContent.length > 0) {
+            this.addMessage(currentMessage, currentContent);
+        }
+    }
+    
+    addMessage(messageInfo, content) {
+        if (content.length > 0) {
+            this.parsedMessages.push({
+                ...messageInfo,
+                content: content
+            });
+        }
     }
 
     initializeChatbox() {
@@ -343,7 +558,7 @@ document.addEventListener('keydown', function(event) {
 
 // Initialize chatbox when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing embedded chatbox...');
+    console.log('DOM loaded, initializing chatbox...');
     window.chatParser = new ChatboxParser();
-    window.chatParser.initializeChatbox();
+    window.chatParser.loadChatHistory(); // This will now load your real file
 });
