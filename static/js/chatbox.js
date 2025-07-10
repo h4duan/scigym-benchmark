@@ -3,6 +3,10 @@ class ChatboxParser {
     constructor() {
         this.chatHistory = '';
         this.parsedMessages = [];
+        this.isPlaying = false;
+        this.currentMessageIndex = 0;
+        this.playbackSpeed = 1500; // milliseconds between messages
+        this.playbackTimeout = null;
     }
 
     async loadChatHistory() {
@@ -10,9 +14,169 @@ class ChatboxParser {
             const response = await fetch('./static/chat/chat_history_demo.txt');
             this.chatHistory = await response.text();
             this.parseChatHistory();
-            this.renderChatbox();
+            this.initializeChatbox();
         } catch (error) {
             console.error('Error loading chat history:', error);
+        }
+    }
+
+    initializeChatbox() {
+        const chatContainer = document.getElementById('chat-container');
+        if (!chatContainer) {
+            console.error('Chat container not found');
+            return;
+        }
+        
+        console.log('Initializing chatbox with play screen');
+        
+        // Create play button instead of immediately showing messages
+        chatContainer.innerHTML = `
+            <div class="chat-play-screen">
+                <div class="play-content">
+                    <div class="play-icon">🎬</div>
+                    <h3>Interactive Scientific Discovery Demo</h3>
+                    <p>Watch an LLM agent iteratively design experiments, analyze data, and discover biological mechanisms in real-time.</p>
+                    <button class="play-button" onclick="window.chatParser.startAutoPlay()">
+                        ▶️ Start Demo
+                    </button>
+                    <div class="demo-info">
+                        <span>Duration: ~2-3 minutes</span> • 
+                        <span>${this.parsedMessages.length} interactions</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    startAutoPlay() {
+        if (this.isPlaying) return;
+        
+        this.isPlaying = true;
+        this.currentMessageIndex = 0;
+        
+        const chatContainer = document.getElementById('chat-container');
+        chatContainer.innerHTML = `
+            <div class="chat-controls">
+                <button class="control-btn pause-btn" onclick="window.chatParser.pauseAutoPlay()">⏸️ Pause</button>
+                <button class="control-btn speed-btn" onclick="window.chatParser.toggleSpeed()">⏩ Speed: 1x</button>
+                <button class="control-btn restart-btn" onclick="window.chatParser.restartAutoPlay()">🔄 Restart</button>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            <div class="chat-messages-container"></div>
+        `;
+        
+        this.playNextMessage();
+    }
+
+    pauseAutoPlay() {
+        this.isPlaying = false;
+        if (this.playbackTimeout) {
+            clearTimeout(this.playbackTimeout);
+            this.playbackTimeout = null;
+        }
+        
+        const pauseBtn = document.querySelector('.pause-btn');
+        if (pauseBtn) {
+            pauseBtn.innerHTML = '▶️ Resume';
+            pauseBtn.onclick = () => window.chatParser.resumeAutoPlay();
+        }
+    }
+
+    resumeAutoPlay() {
+        this.isPlaying = true;
+        const pauseBtn = document.querySelector('.pause-btn');
+        if (pauseBtn) {
+            pauseBtn.innerHTML = '⏸️ Pause';
+            pauseBtn.onclick = () => window.chatParser.pauseAutoPlay();
+        }
+        this.playNextMessage();
+    }
+
+    toggleSpeed() {
+        const speedBtn = document.querySelector('.speed-btn');
+        if (this.playbackSpeed === 1500) {
+            this.playbackSpeed = 750; // 2x speed
+            speedBtn.innerHTML = '⏩ Speed: 2x';
+        } else if (this.playbackSpeed === 750) {
+            this.playbackSpeed = 300; // 4x speed
+            speedBtn.innerHTML = '⏩ Speed: 4x';
+        } else {
+            this.playbackSpeed = 1500; // 1x speed
+            speedBtn.innerHTML = '⏩ Speed: 1x';
+        }
+    }
+
+    restartAutoPlay() {
+        this.pauseAutoPlay();
+        this.currentMessageIndex = 0;
+        const messagesContainer = document.querySelector('.chat-messages-container');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = '';
+        }
+        this.updateProgressBar();
+        this.resumeAutoPlay();
+    }
+
+    playNextMessage() {
+        if (!this.isPlaying || this.currentMessageIndex >= this.parsedMessages.length) {
+            if (this.currentMessageIndex >= this.parsedMessages.length) {
+                this.onAutoPlayComplete();
+            }
+            return;
+        }
+
+        const message = this.parsedMessages[this.currentMessageIndex];
+        const messageElement = this.createMessageElement(message, this.currentMessageIndex);
+        
+        const messagesContainer = document.querySelector('.chat-messages-container');
+        if (messagesContainer) {
+            messageElement.style.opacity = '0';
+            messageElement.style.transform = 'translateY(20px)';
+            messagesContainer.appendChild(messageElement);
+            
+            // Animate message appearance
+            setTimeout(() => {
+                messageElement.style.transition = 'all 0.5s ease';
+                messageElement.style.opacity = '1';
+                messageElement.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // Scroll to show new message
+            setTimeout(() => {
+                messageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 300);
+        }
+
+        this.currentMessageIndex++;
+        this.updateProgressBar();
+
+        // Schedule next message
+        this.playbackTimeout = setTimeout(() => {
+            this.playNextMessage();
+        }, this.playbackSpeed);
+    }
+
+    updateProgressBar() {
+        const progressFill = document.querySelector('.progress-fill');
+        if (progressFill) {
+            const progress = (this.currentMessageIndex / this.parsedMessages.length) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+    }
+
+    onAutoPlayComplete() {
+        this.isPlaying = false;
+        const controls = document.querySelector('.chat-controls');
+        if (controls) {
+            controls.innerHTML = `
+                <div class="completion-message">
+                    <span class="completion-icon">✅</span>
+                    <span>Demo completed! The agent successfully discovered biological mechanisms through iterative experimentation.</span>
+                    <button class="control-btn restart-btn" onclick="window.chatParser.restartAutoPlay()">🔄 Watch Again</button>
+                </div>
+            `;
         }
     }
 
@@ -210,18 +374,6 @@ class ChatboxParser {
                 content: content
             });
         }
-    }
-    
-    renderChatbox() {
-        const chatContainer = document.getElementById('chat-container');
-        if (!chatContainer) return;
-        
-        chatContainer.innerHTML = '';
-        
-        this.parsedMessages.forEach((message, index) => {
-            const messageDiv = this.createMessageElement(message, index);
-            chatContainer.appendChild(messageDiv);
-        });
     }
     
     createMessageElement(message, index) {
@@ -431,8 +583,12 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Global variable for the parser instance
+let chatParser;
+
 // Initialize chatbox when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    const parser = new ChatboxParser();
-    parser.loadChatHistory();
+    console.log('DOM loaded, initializing chatbox...');
+    window.chatParser = new ChatboxParser();
+    window.chatParser.loadChatHistory();
 });
