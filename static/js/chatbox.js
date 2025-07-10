@@ -464,6 +464,9 @@ class ChatboxParser {
             } else if (item.type === 'code') {
                 const codeContainer = this.createCodeBlock(item.content, item.language);
                 contentDiv.appendChild(codeContainer);
+            } else if (item.type === 'xml') {
+                const xmlContainer = this.createCodeBlock(item.content, item.language);
+                contentDiv.appendChild(xmlContainer);
             } else if (item.type === 'experimental_data') {
                 const dataContainer = this.createCodeBlock(item.content.join('\n'), 'text');
                 contentDiv.appendChild(dataContainer);
@@ -500,15 +503,81 @@ class ChatboxParser {
         const container = document.createElement('div');
         container.className = 'expandable-code-container';
         
+        // Determine block characteristics
+        const lines = code.split('\n');
+        let isLong, previewLines, buttonText, collapseText;
+        
+        if (language === 'xml') {
+            isLong = lines.length > 8;
+            previewLines = lines.slice(0, 6);
+            buttonText = '📋 View Full SBML';
+            collapseText = '📋 Collapse SBML';
+        } else if (language === 'text' && code.includes('Time')) {
+            isLong = lines.length > 10;
+            previewLines = lines.slice(0, 8);
+            buttonText = '📊 View Full Data';
+            collapseText = '📊 Collapse Data';
+        } else {
+            isLong = lines.length > 5;
+            previewLines = lines.slice(0, 4);
+            buttonText = '📄 View Full Code';
+            collapseText = '📄 Collapse Code';
+        }
+        
+        const preview = previewLines.join('\n');
+        
         const previewDiv = document.createElement('div');
         previewDiv.className = 'code-preview';
         
         const previewCode = document.createElement('pre');
-        previewCode.innerHTML = `<code class="language-${language}">${this.escapeHtml(code)}</code>`;
+        previewCode.innerHTML = `<code class="language-${language}">${this.escapeHtml(preview)}${isLong ? '\n...' : ''}</code>`;
         previewDiv.appendChild(previewCode);
         
+        if (isLong) {
+            const expandBtn = document.createElement('button');
+            expandBtn.className = 'expand-code-btn';
+            expandBtn.textContent = buttonText;
+            expandBtn.onclick = () => this.expandCode(container);
+            previewDiv.appendChild(expandBtn);
+        }
+        
         container.appendChild(previewDiv);
+        
+        // Create full view (hidden by default)
+        if (isLong) {
+            const fullDiv = document.createElement('div');
+            fullDiv.className = 'code-full hidden';
+            
+            const fullCode = document.createElement('pre');
+            fullCode.innerHTML = `<code class="language-${language}">${this.escapeHtml(code)}</code>`;
+            fullDiv.appendChild(fullCode);
+            
+            const collapseBtn = document.createElement('button');
+            collapseBtn.className = 'collapse-code-btn';
+            collapseBtn.textContent = collapseText;
+            collapseBtn.onclick = () => this.collapseCode(container);
+            fullDiv.appendChild(collapseBtn);
+            
+            container.appendChild(fullDiv);
+        }
+        
         return container;
+    }
+    
+    expandCode(container) {
+        const preview = container.querySelector('.code-preview');
+        const full = container.querySelector('.code-full');
+        
+        preview.style.display = 'none';
+        full.classList.remove('hidden');
+    }
+    
+    collapseCode(container) {
+        const preview = container.querySelector('.code-preview');
+        const full = container.querySelector('.code-full');
+        
+        full.classList.add('hidden');
+        preview.style.display = 'block';
     }
 
     escapeHtml(text) {
