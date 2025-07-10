@@ -69,7 +69,10 @@ class ChatboxParser {
     }
 
     parseChatHistory() {
+        console.log('Starting to parse chat history...');
         const lines = this.chatHistory.split('\n');
+        console.log('Total lines to parse:', lines.length);
+        
         let currentMessage = null;
         let currentContent = [];
         let inCodeBlock = false;
@@ -78,22 +81,25 @@ class ChatboxParser {
         let inXMLBlock = false;
         let xmlBlock = [];
         let hasStarted = false;
-        let currentSubSection = null; // Track subsections like ### Experiment, ### Code
+        let currentSubSection = null;
         
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             
             // Initialize with first content if we haven't started yet
             if (!hasStarted && line.trim()) {
+                console.log('Starting parsing with line:', line);
                 currentMessage = { type: 'environment', section: 'task_setup' };
                 currentContent = [];
                 hasStarted = true;
             }
             
-            // Check for iteration markers - these start new sections
-            if (line.match(/^# Iteration/)) {
+            // Check for iteration markers (handle both correct and misspelled versions)
+            if (line.match(/^# Iteration/) || line.match(/^# Interation/)) {
+                console.log('Found iteration marker:', line);
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
+                    console.log('Added message:', currentMessage.type, currentMessage.section);
                 }
                 currentMessage = null;
                 currentContent = [];
@@ -101,10 +107,12 @@ class ChatboxParser {
                 continue;
             }
             
-            // Check for agent messages (thoughts and actions)
+            // Check for agent messages
             if (line.match(/^## Thoughts/)) {
+                console.log('Found thoughts section:', line);
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
+                    console.log('Added previous message:', currentMessage.type, currentMessage.section);
                 }
                 currentMessage = { type: 'agent', section: 'thoughts' };
                 currentContent = [];
@@ -113,8 +121,10 @@ class ChatboxParser {
             }
             
             if (line.match(/^## Action/)) {
+                console.log('Found action section:', line);
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
+                    console.log('Added previous message:', currentMessage.type, currentMessage.section);
                 }
                 currentMessage = { type: 'agent', section: 'action' };
                 currentContent = [];
@@ -124,8 +134,10 @@ class ChatboxParser {
             
             // Check for environment messages
             if (line.match(/^# Observation/)) {
+                console.log('Found observation section:', line);
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
+                    console.log('Added previous message:', currentMessage.type, currentMessage.section);
                 }
                 currentMessage = { type: 'environment', section: 'observation' };
                 currentContent = [];
@@ -136,10 +148,12 @@ class ChatboxParser {
             // Parse subsections for agent actions
             if (currentMessage && currentMessage.type === 'agent' && currentMessage.section === 'action') {
                 if (line.match(/^### Experiment/)) {
+                    console.log('Found experiment subsection');
                     currentSubSection = 'experiment';
                     continue;
                 }
                 if (line.match(/^### Code/)) {
+                    console.log('Found code subsection');
                     currentSubSection = 'code';
                     continue;
                 }
@@ -148,9 +162,10 @@ class ChatboxParser {
             // Parse subsections for environment responses
             if (currentMessage && currentMessage.type === 'environment') {
                 if (line.match(/^## Code Stderror/)) {
-                    // Finish current content and start new message for code error
+                    console.log('Found code error section');
                     if (currentContent.length > 0) {
                         this.addMessage(currentMessage, currentContent);
+                        console.log('Added previous message before code error');
                     }
                     currentMessage = { type: 'environment', section: 'code_error' };
                     currentContent = [];
@@ -158,9 +173,10 @@ class ChatboxParser {
                     continue;
                 }
                 if (line.match(/^## Code Stdout/)) {
-                    // Finish current content and start new message for code output
+                    console.log('Found code output section');
                     if (currentContent.length > 0) {
                         this.addMessage(currentMessage, currentContent);
+                        console.log('Added previous message before code output');
                     }
                     currentMessage = { type: 'environment', section: 'code_output' };
                     currentContent = [];
@@ -168,9 +184,10 @@ class ChatboxParser {
                     continue;
                 }
                 if (line.match(/^## Experiment Result/)) {
-                    // Finish current content and start new message for experiment result
+                    console.log('Found experiment result section');
                     if (currentContent.length > 0) {
                         this.addMessage(currentMessage, currentContent);
+                        console.log('Added previous message before experiment result');
                     }
                     currentMessage = { type: 'environment', section: 'experiment_result' };
                     currentContent = [];
@@ -181,6 +198,7 @@ class ChatboxParser {
             
             // Check for other environment sections
             if (line.match(/^## Task Info/)) {
+                console.log('Found task info section');
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
@@ -191,6 +209,7 @@ class ChatboxParser {
             }
             
             if (line.match(/^## Incomplete SBML Model/)) {
+                console.log('Found SBML model section');
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
@@ -201,6 +220,7 @@ class ChatboxParser {
             }
             
             if (line.match(/^## Max iterations/)) {
+                console.log('Found max iterations section');
                 if (currentMessage) {
                     this.addMessage(currentMessage, currentContent);
                 }
@@ -212,12 +232,20 @@ class ChatboxParser {
             
             // Skip reminder and other sections we don't want
             if (line.match(/^## Reminder/)) {
-                // Skip the reminder section entirely
+                console.log('Skipping reminder section');
+                // Skip all content until we find the next major section
                 let j = i + 1;
-                while (j < lines.length && !lines[j].match(/^##/)) {
+                while (j < lines.length) {
+                    const nextLine = lines[j];
+                    // Stop when we find a new iteration, thoughts, action, or observation
+                    if (nextLine.match(/^# (Iteration|Interation)/) || 
+                        nextLine.match(/^## (Thoughts|Action)/) || 
+                        nextLine.match(/^# Observation/)) {
+                        break;
+                    }
                     j++;
                 }
-                i = j - 1; // Set i to the line before the next section
+                i = j - 1;
                 continue;
             }
             
@@ -226,8 +254,9 @@ class ChatboxParser {
                 continue;
             }
             
-            // Handle XML blocks (SBML content)
+            // Handle XML blocks
             if (line.match(/^<\?xml/) || line.match(/^<sbml/)) {
+                console.log('Starting XML block');
                 inXMLBlock = true;
                 xmlBlock = [line];
                 continue;
@@ -236,6 +265,7 @@ class ChatboxParser {
             if (inXMLBlock) {
                 xmlBlock.push(line);
                 if (line.match(/^<\/sbml>/)) {
+                    console.log('Ending XML block');
                     currentContent.push({
                         type: 'xml',
                         content: xmlBlock.join('\n'),
@@ -251,6 +281,7 @@ class ChatboxParser {
             // Handle code blocks
             if (line.match(/^```/)) {
                 if (inCodeBlock) {
+                    console.log('Ending code block');
                     if (codeBlock.length > 0) {
                         currentContent.push({
                             type: 'code',
@@ -263,6 +294,7 @@ class ChatboxParser {
                     inCodeBlock = false;
                     currentCodeLanguage = '';
                 } else {
+                    console.log('Starting code block');
                     currentCodeLanguage = line.replace(/```/g, '').trim() || 'text';
                     inCodeBlock = true;
                     codeBlock = [];
@@ -275,7 +307,6 @@ class ChatboxParser {
             } else if (currentMessage && line.trim()) {
                 // Handle content based on current subsection
                 if (currentSubSection === 'experiment_result' && (line.match(/^Time\s+id_/) || line.match(/^\d+/) || line.match(/^\d+\.\d+e[+-]\d+/) || line.match(/^\.\.\./))) {
-                    // This is experimental data content
                     if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'experimental_data') {
                         currentContent.push({ 
                             type: 'experimental_data', 
@@ -285,7 +316,6 @@ class ChatboxParser {
                     }
                     currentContent[currentContent.length - 1].content.push(line);
                 } else if ((currentSubSection === 'code_error' || currentSubSection === 'code_output') && line.trim()) {
-                    // For code errors and outputs, treat all content as code
                     if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'code' || currentContent[currentContent.length - 1].subSection !== currentSubSection) {
                         currentContent.push({ 
                             type: 'code', 
@@ -296,7 +326,6 @@ class ChatboxParser {
                     }
                     currentContent[currentContent.length - 1].content.push(line);
                 } else {
-                    // Regular text content
                     if (currentContent.length === 0 || currentContent[currentContent.length - 1].type !== 'text' || currentContent[currentContent.length - 1].subSection !== currentSubSection) {
                         currentContent.push({ 
                             type: 'text', 
@@ -312,7 +341,10 @@ class ChatboxParser {
         // Add final message if exists
         if (currentMessage && currentContent.length > 0) {
             this.addMessage(currentMessage, currentContent);
+            console.log('Added final message:', currentMessage.type, currentMessage.section);
         }
+        
+        console.log('Parsing complete. Total messages:', this.parsedMessages.length);
     }
     
     addMessage(messageInfo, content) {
