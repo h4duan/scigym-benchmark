@@ -551,9 +551,9 @@ class ChatboxParser {
         const name = document.createElement('div');
         name.className = 'message-name';
         if (message.type === 'agent') {
-            name.textContent = message.section === 'thoughts' ? 'AI Agent (thinking)' : 'AI Agent';
+            name.textContent = message.section === 'thoughts' ? 'Agent (thinking)' : 'Agent (action)';
         } else {
-            name.textContent = 'SciGym Environment';
+            name.textContent = 'Environment';
         }
         
         messageHeader.appendChild(avatar);

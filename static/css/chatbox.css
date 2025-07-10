@@ -592,36 +592,120 @@
     font-weight: 400;
 }
 
-/* Terminal Buttons */
+/* Terminal Buttons - Fixed Readability */
 .expand-code-btn,
 .collapse-code-btn {
     position: absolute;
     top: 0.75rem;
     right: 1rem;
-    background: rgba(0, 255, 0, 0.2);
+    background: rgba(0, 0, 0, 0.8);
     color: #00ff00;
-    border: 1px solid #00ff00;
+    border: 2px solid #00ff00;
     border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.7rem;
-    font-weight: 600;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
     display: flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.4rem;
     font-family: 'JetBrains Mono', monospace;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+    backdrop-filter: blur(10px);
 }
 
 .expand-code-btn:hover,
 .collapse-code-btn:hover {
-    background: rgba(0, 255, 0, 0.3);
-    transform: translateY(-1px);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    background: rgba(0, 255, 0, 0.2);
+    color: #ffffff;
+    border-color: #7dd3fc;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+/* Content-specific button colors for better contrast */
+.experiment-block .expand-code-btn,
+.experiment-block .collapse-code-btn {
+    background: rgba(0, 0, 0, 0.9);
+    color: #fbbf24;
+    border-color: #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+.experiment-block .expand-code-btn:hover,
+.experiment-block .collapse-code-btn:hover {
+    background: rgba(251, 191, 36, 0.2);
+    color: #ffffff;
+    border-color: #fde047;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+}
+
+.error-block .expand-code-btn,
+.error-block .collapse-code-btn {
+    background: rgba(0, 0, 0, 0.9);
+    color: #ef4444;
+    border-color: #ef4444;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+.error-block .expand-code-btn:hover,
+.error-block .collapse-code-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ffffff;
+    border-color: #f87171;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+.output-block .expand-code-btn,
+.output-block .collapse-code-btn {
+    background: rgba(0, 0, 0, 0.9);
+    color: #7dd3fc;
+    border-color: #7dd3fc;
+    box-shadow: 0 0 15px rgba(125, 211, 252, 0.4);
+}
+
+.output-block .expand-code-btn:hover,
+.output-block .collapse-code-btn:hover {
+    background: rgba(125, 211, 252, 0.2);
+    color: #ffffff;
+    border-color: #a5f3fc;
+    box-shadow: 0 0 20px rgba(125, 211, 252, 0.6);
+}
+
+.data-block .expand-code-btn,
+.data-block .collapse-code-btn {
+    background: rgba(0, 0, 0, 0.9);
+    color: #a78bfa;
+    border-color: #a78bfa;
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
+}
+
+.data-block .expand-code-btn:hover,
+.data-block .collapse-code-btn:hover {
+    background: rgba(167, 139, 250, 0.2);
+    color: #ffffff;
+    border-color: #c4b5fd;
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
+}
+
+.xml-block .expand-code-btn,
+.xml-block .collapse-code-btn {
+    background: rgba(0, 0, 0, 0.9);
+    color: #fb7185;
+    border-color: #fb7185;
+    box-shadow: 0 0 15px rgba(251, 113, 133, 0.4);
+}
+
+.xml-block .expand-code-btn:hover,
+.xml-block .collapse-code-btn:hover {
+    background: rgba(251, 113, 133, 0.2);
+    color: #ffffff;
+    border-color: #fda4af;
+    box-shadow: 0 0 20px rgba(251, 113, 133, 0.6);
 }
 
 .btn-icon {
