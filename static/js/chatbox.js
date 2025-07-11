@@ -388,10 +388,6 @@ class ChatboxParser {
                     <div class="play-icon">🎬</div>
                     <h3>🤖 SciGym Demo</h3>
                     <p>This chat history shows Claude conducting scientific discovery through iterative experimentation and data analysis.</p>
-                    <div class="demo-info">
-                        <span>Duration: ~1 minute</span> • 
-                        <span>${this.parsedMessages.length} messages</span>
-                    </div>
                     <div class="play-options">
                         <button class="primary-action-button" onclick="window.chatParser.startAutoPlay()">
                             <span class="btn-emoji">▶️</span>
