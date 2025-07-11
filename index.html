@@ -146,7 +146,7 @@
         <h3 class="title is-4">Abstract</h3>
         <div class="content has-text-justified">
           <p>
-            Designing experiments and result interpretations are core scientific competencies, particularly in biology, where researchers perturb complex systems to uncover the underlying systems. Recent efforts to evaluate the scientific capabilities of large language models (LLMs) fail to test these competencies because wet-lab experimentation is prohibitively expensive: in expertise, time and equipment. We introduce <strong>SCIGYM</strong>, a first-in-class benchmark that assesses LLMs' iterative experiment design and analysis abilities in open-ended scientific discovery tasks.
+            <strong>Designing experiments</strong> and <strong>result interpretations</strong> are core scientific competencies, particularly in biology, where researchers design precise experiments to perturb complex systems to uncover the underlying systems. Recent efforts to evaluate the scientific capabilities of large language models (LLMs) fail to test these competencies because wet-lab experimentation is prohibitively expensive: in expertise, time and equipment. We introduce <strong>SCIGYM</strong>, a first-in-class benchmark that assesses LLMs' iterative experiment design and analysis abilities in open-ended scientific discovery tasks.
           </p>
           <p>
             SCIGYM overcomes the challenge of wet-lab costs by running a dry lab of biological systems. These models, encoded in Systems Biology Markup Language, are efficient for generating simulated data, making them ideal testbeds for experimentation on realistically complex systems. We evaluated six frontier LLMs on 137 small systems, and released a total of 350 systems. Our evaluation shows that while more capable models demonstrated superior performance, all models' performance declined significantly as system complexity increased, suggesting substantial room for improvement in the scientific capabilities of LLM agents.
@@ -163,7 +163,10 @@
 
             <h3 class="title is-4">What is Systems Biology Markup Language (SBML)?</h3>
             <p>
-            SBML is a standard machine-readable format for formal specifications of biochemical dynamic networks in systems biology. These models provide mathematical descriptions of species concentrations, reaction kinetics, and system dynamics as ordinary differential equation (ODE) systems. SBML describes biochemical reaction networks using species (molecules, proteins), reactions (processes that change quantities), and kinetic laws (reaction speeds). Numerous simulation software packages have been developed to efficiently generate time-series data from SBML models, with the most popular ones being libRoadRunner and COPASI.
+            Systems Biology Markup Language (SBML) is an XML-based standard for representing computational models of biological processes. It provides a formal specification language for describing dynamic systems in systems biology, enabling researchers to create mathematical models that capture the behavior of complex biological networks through ordinary differential equations (ODEs).
+            </p>
+            <p>
+            SBML can represent diverse biological phenomena, including metabolic networks, gene regulatory circuits, cell signaling pathways, and pharmacokinetic models. As an open standard, SBML has gained widespread adoption across the systems biology community, with extensive software support and active development by researchers and tool developers worldwide. The language's standardized format facilitates model sharing, reproducibility, and interoperability between different simulation platforms. Popular simulation tools like libRoadRunner and COPASI can efficiently execute SBML models to generate time-series data, making it straightforward for researchers to analyze system dynamics and test biological hypotheses computationally.
             </p>
 
             <h3 class="title is-4">Benchmark Design and Data Curation</h3>
@@ -336,13 +339,15 @@
 
             <h3 class="title is-4">Impact and Future Directions</h3>
             <p>
-            This work has immediate relevance for LLM-based autonomous experiment planning in self-driving labs, where selecting appropriate AI systems can enhance search efficiency and accelerate scientific discovery. we believe that SCIGYM realizes an interesting new direction for AI scientist benchmarks. To our knowledge, SCIGYM is the first benchmark to evaluate LLMs on the full cycle of scientific experimentation, and makes possible the study of agentic scientific decision-making.  
-            SCIGYM is also a framework which can improve over time. As systems biologists continue to make discoveries in their domain and add to the BioModels database, SCIGYM will also become more robust and potentially expand to cover more, different, experimental modalities. For experimental protocols that can be precisely specified and simulated, SCIGYM can easily be extended.
+            We believe this work has immediate relevance for LLM-based autonomous experiment planning in self-driving labs, where selecting appropriate AI systems can enhance search efficiency and accelerate scientific discovery. To our knowledge, SCIGYM is the first benchmark to evaluate LLMs on the full cycle of scientific experimentation, and makes possible the study of agentic scientific decision-making.  
             
             <p>
-              We hope that our work introduces a valuable testbed that can continue to evolve to better capture the complexities of real scientific discovery. 
+            SCIGYM is designed to evolve alongside scientific progress. As systems biologists continue advancing their field and contributing new models to databases like BioModels, SCIGYM will correspondingly grow more robust and comprehensive. The framework's modular design enables straightforward extension to additional experimental modalities and domains where protocols can be precisely specified and computationally simulated.
             </p>
-            
+
+            <p>
+              We envision SCIGYM as a living testbed that will continue to evolve, incorporating increasingly sophisticated experimental scenarios and evaluation metrics to better capture the nuanced complexities of authentic scientific discovery processes.            
+            </p>
           </div>
         </div>
       </div>
