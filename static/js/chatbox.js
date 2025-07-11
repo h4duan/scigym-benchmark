@@ -1,4 +1,4 @@
-// Self-contained chatbox that doesn't need external files
+// Chatbox functionality for SciGym demo - Syntax Checked
 class ChatboxParser {
     constructor() {
         this.chatHistory = '';
@@ -386,14 +386,21 @@ class ChatboxParser {
             <div class="chat-play-screen">
                 <div class="play-content">
                     <div class="play-icon">🎬</div>
-                    <h3>Interactive Scientific Discovery Demo</h3>
-                    <p>Watch an LLM agent iteratively design experiments, analyze data, and discover biological mechanisms in real-time.</p>
-                    <button class="play-button" onclick="window.chatParser.startAutoPlay()">
-                        ▶️ Start Demo
-                    </button>
+                    <h3>🤖 SciGym Demo</h3>
+                    <p>This chat history shows Claude conducting scientific discovery through iterative experimentation and data analysis.</p>
                     <div class="demo-info">
                         <span>Duration: ~1 minute</span> • 
                         <span>${this.parsedMessages.length} messages</span>
+                    </div>
+                    <div class="play-options">
+                        <button class="primary-action-button" onclick="window.chatParser.startAutoPlay()">
+                            <span class="btn-emoji">▶️</span>
+                            <span>Start Demo</span>
+                        </button>
+                        <div class="alternative-options">
+                            <span class="alternative-text">or</span>
+                            <a class="alternative-link" onclick="window.chatParser.startManualMode()">browse manually</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -413,6 +420,7 @@ class ChatboxParser {
                 <button class="control-btn pause-btn" onclick="window.chatParser.pauseAutoPlay()">⏸️ Pause</button>
                 <button class="control-btn speed-btn" onclick="window.chatParser.toggleSpeed()">⏩ Speed: 1x</button>
                 <button class="control-btn restart-btn" onclick="window.chatParser.restartAutoPlay()">🔄 Restart</button>
+                <button class="control-btn manual-switch-btn" onclick="window.chatParser.startManualMode()">📜 Manual</button>
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
@@ -421,6 +429,104 @@ class ChatboxParser {
         `;
         
         this.playNextMessage();
+    }
+
+    startManualMode() {
+        console.log('Starting manual scroll mode');
+        this.isPlaying = false;
+        this.currentMessageIndex = 0;
+        
+        const chatContainer = document.getElementById('chat-container');
+        chatContainer.innerHTML = `
+            <div class="manual-controls">
+                <div class="manual-header">
+                    <h4>📜 Manual Navigation Mode</h4>
+                    <p>Navigate through the conversation at your own pace</p>
+                </div>
+                <div class="manual-nav">
+                    <button class="nav-btn prev-btn" onclick="window.chatParser.showPreviousMessage()" disabled>
+                        ← Previous
+                    </button>
+                    <span class="message-counter">
+                        Message <span id="current-msg">1</span> of ${this.parsedMessages.length}
+                    </span>
+                    <button class="nav-btn next-btn" onclick="window.chatParser.showNextMessage()">
+                        Next →
+                    </button>
+                </div>
+                <div class="manual-progress">
+                    <div class="manual-progress-fill"></div>
+                </div>
+                <button class="switch-mode-btn" onclick="window.chatParser.startAutoPlay()">
+                    ▶️ Switch to Auto-Play
+                </button>
+            </div>
+            <div class="manual-message-container"></div>
+        `;
+        
+        this.showCurrentMessage();
+    }
+
+    showPreviousMessage() {
+        if (this.currentMessageIndex > 0) {
+            this.currentMessageIndex--;
+            this.showCurrentMessage();
+        }
+    }
+
+    showNextMessage() {
+        if (this.currentMessageIndex < this.parsedMessages.length - 1) {
+            this.currentMessageIndex++;
+            this.showCurrentMessage();
+        }
+    }
+
+    showCurrentMessage() {
+        const messageContainer = document.querySelector('.manual-message-container');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const currentMsgSpan = document.getElementById('current-msg');
+        const progressFill = document.querySelector('.manual-progress-fill');
+        
+        if (!messageContainer) return;
+        
+        // Update counter and progress
+        currentMsgSpan.textContent = this.currentMessageIndex + 1;
+        const progress = ((this.currentMessageIndex + 1) / this.parsedMessages.length) * 100;
+        progressFill.style.width = `${progress}%`;
+        
+        // Update button states
+        prevBtn.disabled = this.currentMessageIndex === 0;
+        nextBtn.disabled = this.currentMessageIndex === this.parsedMessages.length - 1;
+        
+        // Show current message
+        const message = this.parsedMessages[this.currentMessageIndex];
+        const messageElement = this.createMessageElement(message, this.currentMessageIndex);
+        
+        // Animate message change
+        messageContainer.style.opacity = '0.3';
+        messageContainer.style.transform = 'translateY(10px)';
+        
+        setTimeout(() => {
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageElement);
+            
+            setTimeout(() => {
+                messageContainer.style.opacity = '1';
+                messageContainer.style.transform = 'translateY(0)';
+            }, 50);
+        }, 150);
+        
+        // Handle completion
+        if (this.currentMessageIndex === this.parsedMessages.length - 1) {
+            setTimeout(() => {
+                const manualControls = document.querySelector('.manual-controls');
+                const completionBadge = document.createElement('div');
+                completionBadge.className = 'completion-badge';
+                completionBadge.innerHTML = '✅ Conversation Complete!';
+                manualControls.appendChild(completionBadge);
+            }, 500);
+        }
     }
 
     pauseAutoPlay() {
@@ -489,20 +595,40 @@ class ChatboxParser {
             messageElement.style.transform = 'translateY(20px)';
             messagesContainer.appendChild(messageElement);
             
+            // Animate message appearance
             setTimeout(() => {
                 messageElement.style.transition = 'all 0.5s ease';
                 messageElement.style.opacity = '1';
                 messageElement.style.transform = 'translateY(0)';
             }, 100);
             
+            // Better scrolling behavior - only scroll if needed and more gently
             setTimeout(() => {
-                messageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }, 300);
+                const containerHeight = messagesContainer.clientHeight;
+                const containerScrollTop = messagesContainer.scrollTop;
+                const containerScrollBottom = containerScrollTop + containerHeight;
+                
+                const messageTop = messageElement.offsetTop;
+                const messageBottom = messageTop + messageElement.offsetHeight;
+                
+                // Only scroll if the message is not fully visible
+                if (messageBottom > containerScrollBottom) {
+                    // Calculate minimal scroll needed to show the message
+                    const scrollNeeded = messageBottom - containerScrollBottom + 20; // 20px padding
+                    
+                    // Smooth scroll by the minimal amount needed
+                    messagesContainer.scrollTo({
+                        top: containerScrollTop + scrollNeeded,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 600); // Wait for message animation to complete
         }
 
         this.currentMessageIndex++;
         this.updateProgressBar();
 
+        // Schedule next message
         this.playbackTimeout = setTimeout(() => {
             this.playNextMessage();
         }, this.playbackSpeed);
@@ -551,9 +677,9 @@ class ChatboxParser {
         const name = document.createElement('div');
         name.className = 'message-name';
         if (message.type === 'agent') {
-            name.textContent = message.section === 'thoughts' ? 'Agent (thinking)' : 'Agent (action)';
+            name.textContent = message.section === 'thoughts' ? 'AI Agent (thinking)' : 'AI Agent';
         } else {
-            name.textContent = 'Environment';
+            name.textContent = 'SciGym Environment';
         }
         
         messageHeader.appendChild(avatar);
@@ -627,11 +753,11 @@ class ChatboxParser {
             case 'experiment':
                 isLong = lines.length > 6;
                 previewLines = lines.slice(0, 5);
-                buttonText = '🧪 View Full Experiment';
-                collapseText = '🧪 Collapse Experiment';
+                buttonText = '🧪 View Full Proposal';
+                collapseText = '🧪 Collapse Proposal';
                 blockType = 'experiment-block';
                 headerIcon = '🧪';
-                headerText = 'Experiment Design';
+                headerText = 'Experiment Proposal';
                 break;
             case 'code':
                 isLong = lines.length > 5;
@@ -758,7 +884,7 @@ class ChatboxParser {
         full.classList.add('hidden');
         preview.style.display = 'block';
     }
-
+    
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -795,6 +921,7 @@ function toggleFullscreen() {
     }
 }
 
+// Handle escape key to exit fullscreen
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         const chatSection = document.getElementById('chat-demo-section');
@@ -804,9 +931,12 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Global variable for the parser instance
+let chatParser;
+
 // Initialize chatbox when page loads
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing chatbox...');
     window.chatParser = new ChatboxParser();
-    window.chatParser.loadChatHistory(); // This will now load your real file
+    window.chatParser.loadChatHistory();
 });
