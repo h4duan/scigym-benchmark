@@ -420,7 +420,7 @@ class ChatboxParser {
                 <button class="control-btn pause-btn" onclick="window.chatParser.pauseAutoPlay()">⏸️ Pause</button>
                 <button class="control-btn speed-btn" onclick="window.chatParser.toggleSpeed()">⏩ Speed: 1x</button>
                 <button class="control-btn restart-btn" onclick="window.chatParser.restartAutoPlay()">🔄 Restart</button>
-                <button class="control-btn manual-switch-btn" onclick="window.chatParser.startManualMode()">📜 Manual</button>
+                <button class="control-btn manual-switch-btn" onclick="window.chatParser.startManualMode()">📜 Manual Browse</button>
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
@@ -440,8 +440,7 @@ class ChatboxParser {
         chatContainer.innerHTML = `
             <div class="manual-controls">
                 <div class="manual-header">
-                    <h4>📜 Manual Navigation Mode</h4>
-                    <p>Navigate through the conversation at your own pace</p>
+                    <h4>📜 Manually Browse</h4>
                 </div>
                 <div class="manual-nav">
                     <button class="nav-btn prev-btn" onclick="window.chatParser.showPreviousMessage()" disabled>
